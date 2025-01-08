@@ -74,20 +74,18 @@ def display_environment(environment):
 # Function to start the environment creation after collecting parameters
 def start_environment():
     bomb_ratio_value = bomb_ratio_var.get()
+    approach_value = approach_var.get()
 
     # Generate and display the environment
-    environment = generate_environment(bomb_ratio_value, approach='C')
+    environment = generate_environment(bomb_ratio_value, approach_value)
     display_environment(environment)
 
 # Main GUI for parameter entry
 root = tk.Tk()
 root.title("Ambiente")
 
-# Instruction Label
-instruction_label = tk.Label(root, text="Seleccionar a percentagem de bombas no ambiente:", font=("Arial", 12))
-instruction_label.pack(pady=10)
-
-# Bomb Ratio Options
+# Bomb Ratio Selection
+tk.Label(root, text="Seleccionar a percentagem de bombas no ambiente:", font=("Arial", 12)).pack(pady=10)
 bomb_ratio_var = tk.DoubleVar(value=0.5)  # Default value
 bomb_options = {
     "50% Bombs": 0.5,
@@ -98,6 +96,17 @@ bomb_options = {
 
 for label, value in bomb_options.items():
     tk.Radiobutton(root, text=label, variable=bomb_ratio_var, value=value).pack(anchor="w")
+
+# Approach Selection
+tk.Label(root, text="Select the approach for the environment:", font=("Arial", 12)).pack(pady=10)
+approach_var = tk.StringVar(value="A")
+approach_options = {
+    "Approach A": "A",
+    "Approach B": "B",
+    "Approach C": "C"
+}
+for label, value in approach_options.items():
+    tk.Radiobutton(root, text=label, variable=approach_var, value=value).pack(anchor="w")
 
 # Start Button
 start_button = tk.Button(root, text="Create Environment", command=start_environment, bg="blue", fg="white")
