@@ -1,7 +1,7 @@
 import random
 import tkinter as tk
 
-def generate_environment(bombs_ratio):
+def generate_environment(bombs_ratio, approach):
     # Calculate total cells
     rows = 10
     cols = 10
@@ -24,7 +24,12 @@ def generate_environment(bombs_ratio):
 
     # Shuffle the cells for randomness
     random.shuffle(cells)
-    cells[0] = 'L'
+    cells[0] = 'L' #ensures the first cell is always free
+
+    if approach == 'C':
+        #Add the flag to the environment
+        flag_position = random.randint(1, total_cells - 1)  # Ensure not placed at the first position
+        cells[flag_position] = 'F'
 
     environment = [cells[i * cols:(i + 1) * cols] for i in range(rows)]
 
@@ -51,6 +56,8 @@ def display_environment(environment):
                 color = "gray"
             elif cell_value == 'T':
                 color = "gold"
+            elif cell_value == 'F':
+                color = "green"
 
             # Create a label for each cell
             label = tk.Label(
@@ -67,16 +74,14 @@ def display_environment(environment):
 # Function to start the environment creation after collecting parameters
 def start_environment():
     bomb_ratio_value = bomb_ratio_var.get()
-    treasure_ratio = 0.2  # Fixed for simplicity
-    free_cells_ratio = 1 - bomb_ratio_value  # Free cells are what's left after bombs
 
     # Generate and display the environment
-    environment = generate_environment(bomb_ratio_value)
+    environment = generate_environment(bomb_ratio_value, approach='C')
     display_environment(environment)
 
 # Main GUI for parameter entry
 root = tk.Tk()
-root.title("AI Environment Configuration")
+root.title("Ambiente")
 
 # Instruction Label
 instruction_label = tk.Label(root, text="Seleccionar a percentagem de bombas no ambiente:", font=("Arial", 12))
