@@ -38,7 +38,6 @@ class Agent:
             if self.empowered:
                 print(f"{self.name} deactivated a bomb using empowerment!")
                 self.empowered = False # Empowerment is consumed
-                #environment[x][y] = 'L' #Change the bomb cell to a free cell
             else:
                 print(f"{self.name} hit a bomb and is destroyed!")
                 self.alive = False

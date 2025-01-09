@@ -61,12 +61,16 @@ def display_environment(environment, agents):
                     color = "gold"
                 elif cell_value == 'F':
                     color = "green"
+
+                # Check if an agent is in this position
+                agent_here = None
                 for agent in agents:
                     if (r, c) == agent.position:
-                        color = "purple"
+                        color = "purple"  # Keep the purple color for agents
+                        agent_here = agent.name  # Use agent's unique name (e.g., A1, A2)
 
                 # Update label colors and text
-                labels[r][c].config(bg=color, text= cell_value)
+                labels[r][c].config(bg=color, text=agent_here if agent_here else cell_value)
 
     def move_agent(agent, direction):
         if not agent.alive:
@@ -117,55 +121,3 @@ def display_environment(environment, agents):
     # Initial display
     update_grid()
     env_window.mainloop()
-
-# Function to start the environment creation after collecting parameters
-def start_environment():
-    bomb_ratio_value = bomb_ratio_var.get()
-    approach_value = approach_var.get()
-    num_agents = num_agents_var.get()
-
-    # Generate and display the environment
-    environment = generate_environment(bomb_ratio_value, approach_value)
-    agents = [Agent(f"Agent {i+1}",(0,0)) for i in range(num_agents)] #Initializing the Agent
-
-    #Displaying the environment
-    display_environment(environment, agents)
-
-# Main GUI for parameter entry
-root = tk.Tk()
-root.title("Ambiente")
-
-# Bomb Ratio Selection
-tk.Label(root, text="Seleccionar a percentagem de bombas no ambiente:", font=("Arial", 12)).pack(pady=10)
-bomb_ratio_var = tk.DoubleVar(value=0.5)  # Default value
-bomb_options = {
-    "50% Bombs": 0.5,
-    "60% Bombs": 0.6,
-    "70% Bombs": 0.7,
-    "80% Bombs": 0.8
-}
-for label, value in bomb_options.items():
-    tk.Radiobutton(root, text=label, variable=bomb_ratio_var, value=value).pack(anchor="w")
-
-# Approach Selection
-tk.Label(root, text="Select the approach for the environment:", font=("Arial", 12)).pack(pady=10)
-approach_var = tk.StringVar(value="A") #default value
-approach_options = {
-    "Approach A": "A",
-    "Approach B": "B",
-    "Approach C": "C"
-}
-for label, value in approach_options.items():
-    tk.Radiobutton(root, text=label, variable=approach_var, value=value).pack(anchor="w")
-
-# Number of Agents Selection
-tk.Label(root, text="Select the number of agents:", font=("Arial", 12)).pack(pady=10)
-num_agents_var = tk.IntVar(value=1)  # Default value
-tk.Scale(root, from_=1, to=10, orient=tk.HORIZONTAL, variable=num_agents_var).pack()
-
-# Start Button
-start_button = tk.Button(root, text="Create Environment", command=start_environment, bg="blue", fg="white")
-start_button.pack(pady=20)
-
-# Run the main GUI loop
-root.mainloop()
