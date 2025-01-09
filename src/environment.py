@@ -1,5 +1,6 @@
 import random
 import tkinter as tk
+from agent import Agent
 
 def generate_environment(bombs_ratio, approach):
     # Calculate total cells
@@ -35,41 +36,77 @@ def generate_environment(bombs_ratio, approach):
 
     return environment
 
-
 # Function to display the environment
-def display_environment(environment):
+def display_environment(environment, agent):
     rows = len(environment)
     cols = len(environment[0])
 
-    # Create a new window for the environment display
+    # Tkinter window for environment display
     env_window = tk.Tk()
-    env_window.title("Ambiente")
+    env_window.title("Ambiente com Agente")
 
     # Create a grid of labels to represent the environment
+    labels = [[None for _ in range(cols)] for _ in range(rows)]
+
+    def update_grid():
+        for r in range(rows):
+            for c in range(cols):
+                cell_value = environment[r][c]
+                color = "white"
+                if cell_value == 'L':
+                    color = "white"
+                elif cell_value == 'B':
+                    color = "gray"
+                elif cell_value == 'T':
+                    color = "gold"
+                elif cell_value == 'F':
+                    color = "green"
+                if (r, c) == agent.position:
+                    color = "purple"
+
+                # Update label colors and text
+                labels[r][c].config(bg=color, text="A" if (r, c) == agent.position else cell_value) #type: ignore
+
+    def move_agent(direction):
+        if not agent.alive:
+            print(f"{agent.name} is destroyed in {agent.position} and cannot move.")
+            return
+
+        x, y = agent.position
+        environment[x][y] = 'L'  # Clear the agent's previous position
+        new_position = agent.move(direction, environment)
+
+        if agent.alive:
+            environment[new_position[0]][new_position[1]] = 'L'  # Mark new position
+        update_grid()
+
+    # Create the labels
     for r in range(rows):
         for c in range(cols):
-            cell_value = environment[r][c]
-            color = "white"  # Default color
-            if cell_value == 'L':
-                color = "white"
-            elif cell_value == 'B':
-                color = "gray"
-            elif cell_value == 'T':
-                color = "gold"
-            elif cell_value == 'F':
-                color = "green"
-
-            # Create a label for each cell
             label = tk.Label(
                 env_window,
-                text=cell_value,
+                text="",
                 width=6,
                 height=3,
-                bg=color,
+                bg="white",
                 relief="solid",
                 borderwidth=2
             )
             label.grid(row=r, column=c)
+            labels[r][c] = label #type: ignore
+
+    # Control buttons for agent movement
+    controls = tk.Frame(env_window)
+    controls.grid(row=rows, column=0, columnspan=cols)
+
+    tk.Button(controls, text="Up", command=lambda: move_agent("up")).grid(row=0, column=1)
+    tk.Button(controls, text="Down", command=lambda: move_agent("down")).grid(row=2, column=1)
+    tk.Button(controls, text="Left", command=lambda: move_agent("left")).grid(row=1, column=0)
+    tk.Button(controls, text="Right", command=lambda: move_agent("right")).grid(row=1, column=2)
+
+    # Initial display
+    update_grid()
+    env_window.mainloop()
 
 # Function to start the environment creation after collecting parameters
 def start_environment():
@@ -78,7 +115,10 @@ def start_environment():
 
     # Generate and display the environment
     environment = generate_environment(bomb_ratio_value, approach_value)
-    display_environment(environment)
+    agent = Agent("Agent 1",(0,0)) #Initializing the Agent
+
+    #Displaying the environment
+    display_environment(environment, agent)
 
 # Main GUI for parameter entry
 root = tk.Tk()
@@ -93,13 +133,12 @@ bomb_options = {
     "70% Bombs": 0.7,
     "80% Bombs": 0.8
 }
-
 for label, value in bomb_options.items():
     tk.Radiobutton(root, text=label, variable=bomb_ratio_var, value=value).pack(anchor="w")
 
 # Approach Selection
 tk.Label(root, text="Select the approach for the environment:", font=("Arial", 12)).pack(pady=10)
-approach_var = tk.StringVar(value="A")
+approach_var = tk.StringVar(value="A") #default value
 approach_options = {
     "Approach A": "A",
     "Approach B": "B",
@@ -114,4 +153,3 @@ start_button.pack(pady=20)
 
 # Run the main GUI loop
 root.mainloop()
-

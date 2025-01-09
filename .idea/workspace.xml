@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ce8dbe8c-8190-4f0a-8a99-14021771fc7d" name="Changes" comment="02. Gave the generate function the ability to generate differently based on the chosen approach.">
-      <change afterPath="$PROJECT_DIR$/.idea/dictionaries/hp.xml" afterDir="false" />
+    <list default="true" id="ce8dbe8c-8190-4f0a-8a99-14021771fc7d" name="Changes" comment="03. Allowed user/tester to choose the approach he wishes to use.">
+      <change afterPath="$PROJECT_DIR$/src/agent.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/Environment.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/Environment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/Environment.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/environment.py" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -42,6 +42,7 @@
   "keyToString": {
     "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "Python.Environment.executor": "Run",
+    "Python.environment.executor": "Run",
     "RunOnceActivity.ShowReadmeOnStart": "true",
     "SHARE_PROJECT_CONFIGURATION_FILES": "true",
     "git-widget-placeholder": "master",
@@ -71,7 +72,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1736333148938</updated>
-      <workItem from="1736333156269" duration="8969000" />
+      <workItem from="1736333156269" duration="13052000" />
     </task>
     <task id="LOCAL-00001" summary="Primeiro commit. Criação do Ambiente.&#10;Ambiente é gerado com a opção de perguntar o ratio de bombas antes da geração.">
       <option name="closed" value="true" />
@@ -89,7 +90,15 @@
       <option name="project" value="LOCAL" />
       <updated>1736375560864</updated>
     </task>
-    <option name="localTasksCounter" value="3" />
+    <task id="LOCAL-00003" summary="03. Allowed user/tester to choose the approach he wishes to use.">
+      <option name="closed" value="true" />
+      <created>1736376085621</created>
+      <option name="number" value="00003" />
+      <option name="presentableId" value="LOCAL-00003" />
+      <option name="project" value="LOCAL" />
+      <updated>1736376085621</updated>
+    </task>
+    <option name="localTasksCounter" value="4" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -109,9 +118,11 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Primeiro commit. Criação do Ambiente.&#10;Ambiente é gerado com a opção de perguntar o ratio de bombas antes da geração." />
     <MESSAGE value="02. Gave the generate function the ability to generate differently based on the chosen approach." />
-    <option name="LAST_COMMIT_MESSAGE" value="02. Gave the generate function the ability to generate differently based on the chosen approach." />
+    <MESSAGE value="03. Allowed user/tester to choose the approach he wishes to use." />
+    <option name="LAST_COMMIT_MESSAGE" value="03. Allowed user/tester to choose the approach he wishes to use." />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/IA2025$Environment.coverage" NAME="Environment Coverage Results" MODIFIED="1736375198121" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
+    <SUITE FILE_PATH="coverage/IA2025$environment.coverage" NAME="environment Coverage Results" MODIFIED="1736419839111" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
+    <SUITE FILE_PATH="coverage/IA2025$Environment.coverage" NAME="Environment Coverage Results" MODIFIED="1736417129954" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
   </component>
 </project>
