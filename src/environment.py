@@ -37,7 +37,7 @@ def generate_environment(bombs_ratio, approach):
     return environment
 
 # Function to display the environment
-def display_environment(environment, agent):
+def display_environment(environment, agents):
     rows = len(environment)
     cols = len(environment[0])
 
@@ -61,13 +61,14 @@ def display_environment(environment, agent):
                     color = "gold"
                 elif cell_value == 'F':
                     color = "green"
-                if (r, c) == agent.position:
-                    color = "purple"
+                for agent in agents:
+                    if (r, c) == agent.position:
+                        color = "purple"
 
                 # Update label colors and text
-                labels[r][c].config(bg=color, text="A" if (r, c) == agent.position else cell_value) #type: ignore
+                labels[r][c].config(bg=color, text= cell_value)
 
-    def move_agent(direction):
+    def move_agent(agent, direction):
         if not agent.alive:
             print(f"{agent.name} is destroyed in {agent.position} and cannot move.")
             return
@@ -95,14 +96,23 @@ def display_environment(environment, agent):
             label.grid(row=r, column=c)
             labels[r][c] = label #type: ignore
 
-    # Control buttons for agent movement
-    controls = tk.Frame(env_window)
-    controls.grid(row=rows, column=0, columnspan=cols)
+    # Create controls for each agent
+    controls_frame = tk.Frame(env_window)
+    controls_frame.grid(row=rows, column=0, columnspan=cols, pady=10)
 
-    tk.Button(controls, text="Up", command=lambda: move_agent("up")).grid(row=0, column=1)
-    tk.Button(controls, text="Down", command=lambda: move_agent("down")).grid(row=2, column=1)
-    tk.Button(controls, text="Left", command=lambda: move_agent("left")).grid(row=1, column=0)
-    tk.Button(controls, text="Right", command=lambda: move_agent("right")).grid(row=1, column=2)
+    for i, agent in enumerate(agents):
+        #Create a row for each agent's controls
+        row_frame = tk.Frame(controls_frame)
+        row_frame.pack(fill="x", pady=5)
+
+        #Add agent name Label
+        tk.Label(row_frame, text=f"{agent.name}").pack(side="left", padx=5)
+
+        #Add movement buttons
+        tk.Button(row_frame, text="⬆", command=lambda a=agent: move_agent(a, "up")).pack(side="left")
+        tk.Button(row_frame, text="⬅", command=lambda a=agent: move_agent(a,"left")).pack(side="left")
+        tk.Button(row_frame, text="⬇", command=lambda a=agent: move_agent(a,"down")).pack(side="left")
+        tk.Button(row_frame, text="➡", command=lambda a=agent: move_agent(a,"right")).pack(side="left")
 
     # Initial display
     update_grid()
@@ -112,13 +122,14 @@ def display_environment(environment, agent):
 def start_environment():
     bomb_ratio_value = bomb_ratio_var.get()
     approach_value = approach_var.get()
+    num_agents = num_agents_var.get()
 
     # Generate and display the environment
     environment = generate_environment(bomb_ratio_value, approach_value)
-    agent = Agent("Agent 1",(0,0)) #Initializing the Agent
+    agents = [Agent(f"Agent {i+1}",(0,0)) for i in range(num_agents)] #Initializing the Agent
 
     #Displaying the environment
-    display_environment(environment, agent)
+    display_environment(environment, agents)
 
 # Main GUI for parameter entry
 root = tk.Tk()
@@ -146,6 +157,11 @@ approach_options = {
 }
 for label, value in approach_options.items():
     tk.Radiobutton(root, text=label, variable=approach_var, value=value).pack(anchor="w")
+
+# Number of Agents Selection
+tk.Label(root, text="Select the number of agents:", font=("Arial", 12)).pack(pady=10)
+num_agents_var = tk.IntVar(value=1)  # Default value
+tk.Scale(root, from_=1, to=10, orient=tk.HORIZONTAL, variable=num_agents_var).pack()
 
 # Start Button
 start_button = tk.Button(root, text="Create Environment", command=start_environment, bg="blue", fg="white")
