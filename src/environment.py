@@ -1,6 +1,5 @@
 import random
 import tkinter as tk
-from agent import Agent
 
 def generate_environment(bombs_ratio, approach):
     # Calculate total cells
@@ -37,7 +36,7 @@ def generate_environment(bombs_ratio, approach):
     return environment
 
 # Function to display the environment
-def display_environment(environment, agents):
+def display_environment(environment, agents, consume_all_treasure):
     rows = len(environment)
     cols = len(environment[0])
 
@@ -70,19 +69,14 @@ def display_environment(environment, agents):
                         agent_here = agent.name  # Use agent's unique name (e.g., A1, A2)
 
                 # Update label colors and text
-                labels[r][c].config(bg=color, text=agent_here if agent_here else cell_value)
+                labels[r][c].config(bg=color, text=agent_here if agent_here else cell_value) #type: ignore
 
     def move_agent(agent, direction):
         if not agent.alive:
             print(f"{agent.name} is destroyed in {agent.position} and cannot move.")
             return
 
-        x, y = agent.position
-        environment[x][y] = 'L'  # Clear the agent's previous position
-        new_position = agent.move(direction, environment)
-
-        if agent.alive:
-            environment[new_position[0]][new_position[1]] = 'L'  # Mark new position
+        agent.move(direction, environment)
         update_grid()
 
     # Create the labels
