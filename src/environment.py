@@ -53,6 +53,8 @@ def display_environment(environment, agents):
             for c in range(cols):
                 cell_value = environment[r][c]
                 color = "white"
+
+                # Determine the cell's color based on its value
                 if cell_value == 'L':
                     color = "white"
                 elif cell_value == 'B':
@@ -65,7 +67,7 @@ def display_environment(environment, agents):
                 # Check if an agent is in this position
                 agent_here = None
                 for agent in agents:
-                    if (r, c) == agent.position:
+                    if agent.alive and (r, c) == agent.position:
                         color = "purple"  # Keep the purple color for agents
                         agent_here = agent.name  # Use agent's unique name (e.g., A1, A2)
 
