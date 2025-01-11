@@ -36,7 +36,7 @@ def generate_environment(bombs_ratio, approach):
     return environment
 
 # Function to display the environment
-def display_environment(environment, agents, consume_all_treasure):
+def display_environment(environment, agents):
     rows = len(environment)
     cols = len(environment[0])
 

@@ -2,9 +2,10 @@ class Agent:
     def __init__(self, name, start_position, consume_all_treasure):
         self.name = name
         self.position = start_position
-        self.alive = True #T racks if the agent is alive
+        self.alive = True # Tracks if the agent is alive
         self.empowered = False # Tracks if the agent has empowerment
         self.consume_all_treasure = consume_all_treasure
+        self.consumed_treasures = set() # Tracks treasure cells already used to avoid exploits
 
     def move(self, direction, environment):
         if not self.alive:
@@ -27,6 +28,7 @@ class Agent:
             print("Invalid move or out of bounds!")
             return self.position
 
+        #interact with the cell at the new position
         cell = environment[x][y]
 
         if cell == 'L':
@@ -42,12 +44,17 @@ class Agent:
                 if self.consume_all_treasure:
                     environment[x][y] = 'L' #Bomb becomes free cell
         elif cell == 'T':
-            print(f"{self.name} found a treasure! Empowerment acquired.")
-            self.empowered = True # Agent becomes empowered
-            if self.consume_all_treasure:
-                environment[x][y] = 'L' #Treasure is consumed
+            if (x,y) in self.consumed_treasures:
+                print(f"{self.name} stepped on this treasure already. No effect.")
+            else:
+                print(f"{self.name} found a treasure! Empowerment acquired.")
+                self.empowered = True # Agent becomes empowered
+                self.consumed_treasures.add((x,y)) # Marks this treasure as consumed
+                if self.consume_all_treasure:
+                    environment[x][y] = 'L' #Treasure is consumed
         elif cell == 'F':
             print(f"{self.name} reached the flag! Success!")
 
+        # update position after interaction
         self.position = (x, y)
         return self.position

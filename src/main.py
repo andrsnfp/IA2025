@@ -10,14 +10,19 @@ def start_environment():
 
     # Generate and display the environment
     environment = generate_environment(bomb_ratio_value, approach_value)
-    agents = [Agent(f"A {i+1}",(0,0), consume_all_treasure) for i in range(num_agents)] #Initializing the Agent
+    agents = [Agent(f"A{i+1}",(0,0), consume_all_treasure) for i in range(num_agents)] #Initializing the Agent
 
     #Displaying the environment
-    display_environment(environment, agents, consume_all_treasure)
+    display_environment(environment, agents)
 
 # Main GUI for parameter entry
 root = tk.Tk()
 root.title("Ambiente")
+
+# Number of Agents Selection
+tk.Label(root, text="Select the number of agents:", font=("Arial", 12)).pack(pady=10)
+num_agents_var = tk.IntVar(value=1)  # Default value
+tk.Scale(root, from_=1, to=10, orient=tk.HORIZONTAL, variable=num_agents_var).pack()
 
 # Bomb Ratio Selection
 tk.Label(root, text="Seleccionar a percentagem de bombas no ambiente:", font=("Arial", 12)).pack(pady=10)
@@ -42,17 +47,11 @@ approach_options = {
 for label, value in approach_options.items():
     tk.Radiobutton(root, text=label, variable=approach_var, value=value).pack(anchor="w")
 
-# Number of Agents Selection
-tk.Label(root, text="Select the number of agents:", font=("Arial", 12)).pack(pady=10)
-num_agents_var = tk.IntVar(value=1)  # Default value
-tk.Scale(root, from_=1, to=10, orient=tk.HORIZONTAL, variable=num_agents_var).pack()
-
 # Consume All Treasure Selection
 tk.Label(root, text="An Agent will consume all treasure?", font=("Arial", 12)).pack(pady=10)
 consume_all_treasure_var = tk.BooleanVar(value=True)  # Default is True
 tk.Radiobutton(root, text="Yes", variable=consume_all_treasure_var, value=True).pack(anchor="w")
 tk.Radiobutton(root, text="No", variable=consume_all_treasure_var, value=False).pack(anchor="w")
-
 
 # Start Button
 start_button = tk.Button(root, text="Create Environment", command=start_environment, bg="blue", fg="white")
