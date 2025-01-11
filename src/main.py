@@ -1,4 +1,5 @@
 from environment import *
+from ghost_environment import *
 from agent import Agent
 
 # Function to start the environment creation after collecting parameters
@@ -8,12 +9,14 @@ def start_environment():
     num_agents = num_agents_var.get()
     consume_all_treasure = consume_all_treasure_var.get()
 
-    # Generate and display the environment
+    # Generate the environment
+    ghost_environment = initialize_ghost_environment()
     environment = generate_environment(bomb_ratio_value, approach_value)
-    agents = [Agent(f"A{i+1}",(0,0), consume_all_treasure) for i in range(num_agents)] #Initializing the Agent
+    agents = [Agent(f"A{i+1}", consume_all_treasure, ghost_environment) for i in range(num_agents)] #Initializing the Agents
 
     #Displaying the environment
     display_environment(environment, agents)
+    print_ghost_environment(ghost_environment)
 
 # Main GUI for parameter entry
 root = tk.Tk()

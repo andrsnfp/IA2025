@@ -1,5 +1,6 @@
 import random
 import tkinter as tk
+from ghost_environment import *
 
 def generate_environment(bombs_ratio, approach):
     # Calculate total cells
