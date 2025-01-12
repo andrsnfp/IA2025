@@ -11,12 +11,18 @@ def start_environment():
 
     # Generate the environment
     ghost_environment = initialize_ghost_environment()
-    environment = generate_environment(bomb_ratio_value, approach_value)
+    environment, total_treasures = generate_environment(bomb_ratio_value, approach_value)
     agents = [Agent(f"A{i+1}", consume_all_treasure, ghost_environment) for i in range(num_agents)] #Initializing the Agents
 
+    # Initialize treasure tracking
+    found_treasures = [0]
+
     #Displaying the environment
-    display_environment(environment, agents)
+    display_environment(environment, agents, approach_value,total_treasures, found_treasures)
     print_ghost_environment(ghost_environment)
+
+    # Print total treasures for debugging
+    print(f"Total treasures: {total_treasures}")
 
 # Main GUI for parameter entry
 root = tk.Tk()

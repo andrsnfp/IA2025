@@ -34,10 +34,10 @@ def generate_environment(bombs_ratio, approach):
 
     environment = [cells[i * cols:(i + 1) * cols] for i in range(rows)]
 
-    return environment
+    return environment, num_treasures
 
 # Function to display the environment
-def display_environment(environment, agents):
+def display_environment(environment, agents, approach, total_treasures, found_treasures):
     rows = len(environment)
     cols = len(environment[0])
 
@@ -47,6 +47,27 @@ def display_environment(environment, agents):
 
     # Create a grid of labels to represent the environment
     labels = [[None for _ in range(cols)] for _ in range(rows)]
+
+    def display_success():
+        """
+        Replaces the grid with a success message.
+        """
+        # Destroy all existing widgets
+        for widget in env_window.winfo_children():
+            widget.destroy()
+
+        # Add a success message
+        success_label = tk.Label(env_window, text="SUCCESS", font=("Arial", 24), fg="green")
+        success_label.pack(expand=True)
+
+    def display_failure():
+        """
+        Replaces the grid with a failure message.
+        """
+        for widget in env_window.winfo_children():
+            widget.destroy()
+        failure_label = tk.Label(env_window, text="FAILURE", font=("Arial", 24), fg="red")
+        failure_label.pack(expand=True)
 
     def update_grid():
         for r in range(rows):
@@ -74,12 +95,20 @@ def display_environment(environment, agents):
                 # Update label colors and text
                 labels[r][c].config(bg=color, text=agent_here if agent_here else cell_value) #type: ignore
 
+            # Check success condition if approach A
+            if approach == 'A' and found_treasures[0] > (total_treasures // 2):
+                display_success()
+
+            # Check failure condition
+            if all(not agent.alive for agent in agents) and found_treasures[0] <= (total_treasures // 2):
+                display_failure()
+
     def move_agent(agent, direction):
         if not agent.alive:
             print(f"{agent.name} is destroyed in {agent.position} and cannot move.")
             return
 
-        agent.move(direction, environment)
+        agent.move(direction, environment, found_treasures)
         update_grid()
 
     # Create the labels
