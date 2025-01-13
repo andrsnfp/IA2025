@@ -7,22 +7,23 @@ def start_environment():
     bomb_ratio_value = bomb_ratio_var.get()
     approach_value = approach_var.get()
     num_agents = num_agents_var.get()
+    num_treasures = num_treasures_var.get()
     consume_all_treasure = consume_all_treasure_var.get()
 
     # Generate the environment
     ghost_environment = initialize_ghost_environment()
-    environment, total_treasures = generate_environment(bomb_ratio_value, approach_value)
+    environment= generate_environment(num_treasures, bomb_ratio_value, approach_value)
     agents = [Agent(f"A{i+1}", consume_all_treasure, ghost_environment) for i in range(num_agents)] #Initializing the Agents
 
     # Initialize treasure tracking
     found_treasures = [0]
 
     #Displaying the environment
-    display_environment(environment, agents, approach_value,total_treasures, found_treasures)
+    display_environment(environment, agents, approach_value,num_treasures, found_treasures)
     print_ghost_environment(ghost_environment)
 
     # Print total treasures for debugging
-    print(f"Total treasures: {total_treasures}")
+    print(f"Total treasures: {num_treasures}")
 
 # Main GUI for parameter entry
 root = tk.Tk()
@@ -32,6 +33,11 @@ root.title("Ambiente")
 tk.Label(root, text="Select the number of agents:", font=("Arial", 12)).pack(pady=10)
 num_agents_var = tk.IntVar(value=1)  # Default value
 tk.Scale(root, from_=1, to=10, orient=tk.HORIZONTAL, variable=num_agents_var).pack()
+
+# Number of Treasures Selection
+tk.Label(root, text="Select the number of treasures:", font=("Arial", 12)).pack(pady=10)
+num_treasures_var = tk.IntVar(value=10)  # Default value
+tk.Scale(root, from_=8, to=14, orient=tk.HORIZONTAL, variable=num_treasures_var).pack()
 
 # Bomb Ratio Selection
 tk.Label(root, text="Seleccionar a percentagem de bombas no ambiente:", font=("Arial", 12)).pack(pady=10)

@@ -2,24 +2,20 @@ import random
 import tkinter as tk
 from ghost_environment import *
 
-def generate_environment(bombs_ratio, approach):
+def generate_environment(num_treasures, bombs_ratio, approach):
     # Calculate total cells
     rows = 10
     cols = 10
-    total_cells = rows * cols
+    total_cells = (rows * cols) - num_treasures
 
     # Calculate number of bombs, free cells, and treasures
     num_bombs = int(total_cells * bombs_ratio)
     num_free_cells = total_cells - num_bombs
-    num_treasures = int(num_free_cells * 0.40)
-
-    # Adjust free cells to account for treasures
-    num_free_cells -= num_treasures
 
     # Create the cell list
     cells = (
-            ['B'] * num_bombs +  # Bomb cells
             ['T'] * num_treasures +  # Treasure cells
+            ['B'] * num_bombs +  # Bomb cells
             ['L'] * num_free_cells  # Free cells
     )
 
@@ -34,7 +30,7 @@ def generate_environment(bombs_ratio, approach):
 
     environment = [cells[i * cols:(i + 1) * cols] for i in range(rows)]
 
-    return environment, num_treasures
+    return environment
 
 # Function to display the environment
 def display_environment(environment, agents, approach, total_treasures, found_treasures):
