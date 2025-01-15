@@ -8,7 +8,7 @@ class Agent:
         self.consumed_treasures = set() # Tracks treasure cells already used to avoid exploits
         self.ghost_env = ghost_env
 
-    def move(self, direction, environment, found_treasures):
+    def move(self, direction, environment, found_treasures, flag_found):
         if not self.alive:
             print(f"{self.name} is destroyed and cannot move.")
             return self.position
@@ -30,7 +30,7 @@ class Agent:
             return self.position
 
         #interact with the cell at the new position
-        self.interact(environment, self.ghost_env, x, y, found_treasures)
+        self.interact(environment, self.ghost_env, x, y, found_treasures, flag_found)
 
         # Update position
         self.position = (x, y)
@@ -41,7 +41,7 @@ class Agent:
 
         return self.position
 
-    def interact(self, environment, ghost_env, x, y, found_treasures):
+    def interact(self, environment, ghost_env, x, y, found_treasures, flag_found):
         cell = environment[x][y]
 
         if cell == 'L':
@@ -57,9 +57,6 @@ class Agent:
                 print(f"{self.name} hit a bomb and is destroyed!")
                 self.alive = False
                 if self.consume_all_treasure:
-                    environment[x][y] = 'L'  # Bomb becomes free cell
-                    ghost_env[x][y] = 'L'  # Reflect the change in the ghost environment
-                else:
                     ghost_env[x][y] = 'B'
         elif cell == 'T':
             if (x, y) in self.consumed_treasures:
@@ -74,9 +71,9 @@ class Agent:
                     ghost_env[x][y] = 'L'  # Reflect the change in the ghost environment
                 else:
                     ghost_env[x][y] = 'T'
-
                 # Increment found treasures
                 found_treasures[0] += 1
         elif cell == 'F':
             print(f"{self.name} reached the flag! Success!")
             ghost_env[x][y] = 'F'
+            flag_found[0] = True # Update flag status

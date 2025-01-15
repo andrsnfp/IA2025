@@ -44,6 +44,9 @@ def display_environment(environment, agents, approach, total_treasures, found_tr
     # Create a grid of labels to represent the environment
     labels = [[None for _ in range(cols)] for _ in range(rows)]
 
+    # Track if the flag has been found
+    flag_found = [False]  # Use a mutable list to track flag status
+
     def display_success():
         """
         Replaces the grid with a success message.
@@ -91,20 +94,32 @@ def display_environment(environment, agents, approach, total_treasures, found_tr
                 # Update label colors and text
                 labels[r][c].config(bg=color, text=agent_here if agent_here else cell_value) #type: ignore
 
-            # Check success condition if approach A
-            if approach == 'A' and found_treasures[0] > (total_treasures // 2):
-                display_success()
+            # IF APPROACH A
+            if approach == 'A':
+                # SUCCESS
+                if found_treasures[0] > (total_treasures // 2):
+                    display_success()
+                # FAILURE
+                if all(not agent.alive for agent in agents) and found_treasures[0] <= (total_treasures // 2):
+                    display_failure()
 
-            # Check failure condition
-            if all(not agent.alive for agent in agents) and found_treasures[0] <= (total_treasures // 2):
-                display_failure()
+            #IF APPROACH C
+            elif approach == 'C':
+                # SUCCESS
+                if flag_found[0]:
+                    display_success()
+                # FAILURE
+                if all(not agent.alive for agent in agents) and not flag_found[0]:
+                    display_failure()
+
+
 
     def move_agent(agent, direction):
         if not agent.alive:
             print(f"{agent.name} is destroyed in {agent.position} and cannot move.")
             return
 
-        agent.move(direction, environment, found_treasures)
+        agent.move(direction, environment, found_treasures, flag_found)
         update_grid()
 
     # Create the labels
