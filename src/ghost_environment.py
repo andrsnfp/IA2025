@@ -2,10 +2,10 @@ def initialize_ghost_environment(agents):
     # Initializes the ghost environment with unknown cells ('?').
     rows = 10
     cols = 10
-    env = [['?' for _ in range(cols)] for _ in range(rows)]
+    ghost_env = [['?' for _ in range(cols)] for _ in range(rows)]
     for x,y in agents:
-        env[x][y] = 'L'
-    return env
+        ghost_env[x][y] = 'L'
+    return ghost_env
 
 def update_ghost_environment(ghost_env, x, y, value):
     # Updates ghost environment at position (x,y) with the given value

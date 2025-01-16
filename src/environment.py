@@ -48,9 +48,6 @@ def display_environment(environment, agents, approach, total_treasures, found_tr
     flag_found = [False]  # Use a mutable list to track flag status
 
     def display_success():
-        """
-        Replaces the grid with a success message.
-        """
         # Destroy all existing widgets
         for widget in env_window.winfo_children():
             widget.destroy()
@@ -60,9 +57,6 @@ def display_environment(environment, agents, approach, total_treasures, found_tr
         success_label.pack(expand=True)
 
     def display_failure():
-        """
-        Replaces the grid with a failure message.
-        """
         for widget in env_window.winfo_children():
             widget.destroy()
         failure_label = tk.Label(env_window, text="FAILURE", font=("Arial", 24), fg="red")
@@ -113,7 +107,6 @@ def display_environment(environment, agents, approach, total_treasures, found_tr
                     display_failure()
 
 
-
     def move_agent(agent, direction):
         if not agent.alive:
             print(f"{agent.name} is destroyed in {agent.position} and cannot move.")
@@ -139,7 +132,7 @@ def display_environment(environment, agents, approach, total_treasures, found_tr
 
     # Create controls for each agent
     controls_frame = tk.Frame(env_window)
-    controls_frame.grid(row=rows, column=0, columnspan=cols, pady=10)
+    controls_frame.grid(row=rows, column=0, columnspan=cols, pady=5)
 
     for i, agent in enumerate(agents):
         #Create a row for each agent's controls

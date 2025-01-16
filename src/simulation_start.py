@@ -1,6 +1,7 @@
 from environment import *
 from ghost_environment import *
 from agent import Agent
+from ghost_env import GhostEnvironment
 import random
 
 # Function to handle entry parameters
@@ -67,8 +68,14 @@ def setup_entry_parameters():
 def start_environment(num_agents, num_treasures, bomb_ratio, approach, consume_all_treasure):
     # Generate the environment
     agent_positions = tuple((random.randint(0,9),random.randint(0,9)) for _ in range(num_agents))
+    environment = generate_environment(agent_positions, num_treasures, bomb_ratio, approach)
     ghost_environment = initialize_ghost_environment(agent_positions)
-    environment= generate_environment(agent_positions, num_treasures, bomb_ratio, approach)
+
+    # NEW GHOST ENVIRONMENT TEST
+    ghost_env = GhostEnvironment()
+    ghost_env.initialize_ghost_environment(agent_positions)
+    ghost_env.print_ghost_environment()
+
     agents = [Agent(f"A{i+1}", agent_positions[i],consume_all_treasure, ghost_environment) for i in range(num_agents)] #Initializing the Agents
 
     # Initialize treasure tracking
@@ -76,7 +83,4 @@ def start_environment(num_agents, num_treasures, bomb_ratio, approach, consume_a
 
     #Displaying the environment
     display_environment(environment, agents, approach,num_treasures, found_treasures)
-    print_ghost_environment(ghost_environment)
 
-    # Print total treasures for debugging
-    print(f"Total treasures: {num_treasures}")
