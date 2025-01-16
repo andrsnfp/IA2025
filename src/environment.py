@@ -1,8 +1,7 @@
 import random
 import tkinter as tk
-from ghost_environment import *
 
-def generate_environment(num_treasures, bombs_ratio, approach):
+def generate_environment(agents, num_treasures, bombs_ratio, approach):
     # Calculate total cells
     rows = 10
     cols = 10
@@ -21,14 +20,15 @@ def generate_environment(num_treasures, bombs_ratio, approach):
 
     # Shuffle the cells for randomness
     random.shuffle(cells)
-    cells[0] = 'L' #ensures the first cell is always free
 
     if approach == 'C':
         #Add the flag to the environment
-        flag_position = random.randint(1, total_cells - 1)  # Ensure not placed at the first position
-        cells[flag_position] = 'F'
+        flag = random.randint(1, total_cells - 1)  # Ensure not placed at the first position
+        cells[flag] = 'F'
 
     environment = [cells[i * cols:(i + 1) * cols] for i in range(rows)]
+    for x,y in agents:
+        environment[x][y] = 'L'
 
     return environment
 
