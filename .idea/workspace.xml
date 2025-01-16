@@ -4,10 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ce8dbe8c-8190-4f0a-8a99-14021771fc7d" name="Changes" comment="14. Made agents spawn randomly in the environment. And separated interaction logic.">
-      <change afterPath="$PROJECT_DIR$/src/ghost_env.py" afterDir="false" />
+    <list default="true" id="ce8dbe8c-8190-4f0a-8a99-14021771fc7d" name="Changes" comment="14.1 Created Class GhostEnvironment to replace the current ghost environment. Not finished">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/environment.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/environment.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/agent.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/agent.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/ghost_env.py" beforeDir="false" />
       <change beforePath="$PROJECT_DIR$/src/ghost_environment.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ghost_environment.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/simulation_start.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/simulation_start.py" afterDir="false" />
     </list>
@@ -219,7 +219,15 @@
       <option name="project" value="LOCAL" />
       <updated>1737059695326</updated>
     </task>
-    <option name="localTasksCounter" value="14" />
+    <task id="LOCAL-00014" summary="14.1 Created Class GhostEnvironment to replace the current ghost environment. Not finished">
+      <option name="closed" value="true" />
+      <created>1737062148731</created>
+      <option name="number" value="00014" />
+      <option name="presentableId" value="LOCAL-00014" />
+      <option name="project" value="LOCAL" />
+      <updated>1737062148731</updated>
+    </task>
+    <option name="localTasksCounter" value="15" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -250,10 +258,11 @@
     <MESSAGE value="10.1 Made the agent disappear when he dies." />
     <MESSAGE value="12. Changed the way the environment is generated. Now it receives an entry parameter of the number of treasures. And from there, finds the number of bombs and free cells according to its ratios." />
     <MESSAGE value="14. Made agents spawn randomly in the environment. And separated interaction logic." />
-    <option name="LAST_COMMIT_MESSAGE" value="14. Made agents spawn randomly in the environment. And separated interaction logic." />
+    <MESSAGE value="14.1 Created Class GhostEnvironment to replace the current ghost environment. Not finished" />
+    <option name="LAST_COMMIT_MESSAGE" value="14.1 Created Class GhostEnvironment to replace the current ghost environment. Not finished" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/IA2025$main.coverage" NAME="main Coverage Results" MODIFIED="1737061729623" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
+    <SUITE FILE_PATH="coverage/IA2025$main.coverage" NAME="main Coverage Results" MODIFIED="1737063007371" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/IA2025$environment.coverage" NAME="environment Coverage Results" MODIFIED="1736783737508" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/IA2025$entry_parameters.coverage" NAME="entry_parameters Coverage Results" MODIFIED="1736940572510" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/IA2025$agent.coverage" NAME="agent Coverage Results" MODIFIED="1736631951982" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
