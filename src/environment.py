@@ -28,11 +28,14 @@ def generate_environment(agents, num_treasures, bombs_ratio, approach):
         cells[flag] = 'F'
 
     # Creating a grid of Cell objects
+    environment = [
+        [Cell(cells[r * cols + c], (r, c)) for c in range(cols)]
+        for r in range(rows)
+    ]
 
-
-    environment = [cells[i * cols:(i + 1) * cols] for i in range(rows)]
+    # Mark agent starting positions as free cells in the environment
     for x,y in agents:
-        environment[x][y] = 'L'
+        environment[x][y] = Cell('L', (x, y))
 
     return environment
 
@@ -69,17 +72,17 @@ def display_environment(environment, agents, approach, total_treasures, found_tr
     def update_grid():
         for r in range(rows):
             for c in range(cols):
-                cell_value = environment[r][c]
+                cell = environment[r][c]
                 color = "white"
 
                 # Determine the cell's color based on its value
-                if cell_value == 'L':
+                if cell.type == 'L':
                     color = "white"
-                elif cell_value == 'B':
+                elif cell.type == 'B':
                     color = "gray"
-                elif cell_value == 'T':
+                elif cell.type == 'T':
                     color = "gold"
-                elif cell_value == 'F':
+                elif cell.type == 'F':
                     color = "green"
 
                 # Check if an agent is in this position
@@ -90,7 +93,7 @@ def display_environment(environment, agents, approach, total_treasures, found_tr
                         agent_here = agent.name  # Use agent's unique name (e.g., A1, A2)
 
                 # Update label colors and text
-                labels[r][c].config(bg=color, text=agent_here if agent_here else cell_value) #type: ignore
+                labels[r][c].config(bg=color, text=agent_here if agent_here else cell.type) #type: ignore
 
             # IF APPROACH A
             if approach == 'A':
@@ -98,7 +101,7 @@ def display_environment(environment, agents, approach, total_treasures, found_tr
                 if found_treasures[0] > (total_treasures // 2):
                     display_success()
                 # FAILURE
-                if all(not agent.alive for agent in agents) and found_treasures[0] <= (total_treasures // 2):
+                elif all(not agent.alive for agent in agents) and found_treasures[0] <= (total_treasures // 2):
                     display_failure()
 
             #IF APPROACH C
@@ -107,7 +110,7 @@ def display_environment(environment, agents, approach, total_treasures, found_tr
                 if flag_found[0]:
                     display_success()
                 # FAILURE
-                if all(not agent.alive for agent in agents) and not flag_found[0]:
+                elif all(not agent.alive for agent in agents) and not flag_found[0]:
                     display_failure()
 
 

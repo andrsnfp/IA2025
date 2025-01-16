@@ -1,5 +1,5 @@
 class Cell:
-    def __init__(self, cell_type, position):
+    def __init__(self, cell_type: str, position):
         self.type = cell_type  # 'L', 'B', 'T', or 'F'
         self.position = position  # (row, column)
         self.is_discovered = False  # Tracks if the cell is discovered
