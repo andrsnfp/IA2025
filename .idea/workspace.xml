@@ -4,11 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ce8dbe8c-8190-4f0a-8a99-14021771fc7d" name="Changes" comment="14.1 Created Class GhostEnvironment to replace the current ghost environment. Not finished">
+    <list default="true" id="ce8dbe8c-8190-4f0a-8a99-14021771fc7d" name="Changes" comment="15. Created Class GhostEnvironment to replace the current ghost environment. It is finished and the code has been severely improved.&#10;REMINDER THAT PYTHON IS FUCKING OBJECT ORIENTED">
+      <change afterPath="$PROJECT_DIR$/src/cell.py" afterDir="false" />
+      <change afterPath="$PROJECT_DIR$/src/env.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/agent.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/agent.py" afterDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ghost_env.py" beforeDir="false" />
-      <change beforePath="$PROJECT_DIR$/src/ghost_environment.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/ghost_environment.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/simulation_start.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/simulation_start.py" afterDir="false" />
     </list>
     <list id="6cd9376c-7cb2-4b76-b962-f43c5b9c6df4" name="Changes by Alberto Mateus" comment="" />
@@ -227,7 +226,15 @@
       <option name="project" value="LOCAL" />
       <updated>1737062148731</updated>
     </task>
-    <option name="localTasksCounter" value="15" />
+    <task id="LOCAL-00015" summary="15. Created Class GhostEnvironment to replace the current ghost environment. It is finished and the code has been severely improved.&#10;REMINDER THAT PYTHON IS FUCKING OBJECT ORIENTED">
+      <option name="closed" value="true" />
+      <created>1737063361221</created>
+      <option name="number" value="00015" />
+      <option name="presentableId" value="LOCAL-00015" />
+      <option name="project" value="LOCAL" />
+      <updated>1737063361221</updated>
+    </task>
+    <option name="localTasksCounter" value="16" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -259,7 +266,8 @@
     <MESSAGE value="12. Changed the way the environment is generated. Now it receives an entry parameter of the number of treasures. And from there, finds the number of bombs and free cells according to its ratios." />
     <MESSAGE value="14. Made agents spawn randomly in the environment. And separated interaction logic." />
     <MESSAGE value="14.1 Created Class GhostEnvironment to replace the current ghost environment. Not finished" />
-    <option name="LAST_COMMIT_MESSAGE" value="14.1 Created Class GhostEnvironment to replace the current ghost environment. Not finished" />
+    <MESSAGE value="15. Created Class GhostEnvironment to replace the current ghost environment. It is finished and the code has been severely improved.&#10;REMINDER THAT PYTHON IS FUCKING OBJECT ORIENTED" />
+    <option name="LAST_COMMIT_MESSAGE" value="15. Created Class GhostEnvironment to replace the current ghost environment. It is finished and the code has been severely improved.&#10;REMINDER THAT PYTHON IS FUCKING OBJECT ORIENTED" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/IA2025$main.coverage" NAME="main Coverage Results" MODIFIED="1737063007371" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />

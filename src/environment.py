@@ -1,5 +1,6 @@
 import random
 import tkinter as tk
+from cell import Cell
 
 def generate_environment(agents, num_treasures, bombs_ratio, approach):
     # Calculate total cells
@@ -25,6 +26,9 @@ def generate_environment(agents, num_treasures, bombs_ratio, approach):
         #Add the flag to the environment
         flag = random.randint(1, total_cells - 1)  # Ensure not placed at the first position
         cells[flag] = 'F'
+
+    # Creating a grid of Cell objects
+
 
     environment = [cells[i * cols:(i + 1) * cols] for i in range(rows)]
     for x,y in agents:
