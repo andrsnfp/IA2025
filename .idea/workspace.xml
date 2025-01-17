@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ce8dbe8c-8190-4f0a-8a99-14021771fc7d" name="Changes" comment="15.3. Turned all code into OOP but i need to fix the consume_all_treasures parameter">
+    <list default="true" id="ce8dbe8c-8190-4f0a-8a99-14021771fc7d" name="Changes" comment="16. Slight improvements to the code.">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/agent.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/agent.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/cell.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/cell.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/env_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/env_manager.py" afterDir="false" />
     </list>
@@ -112,7 +113,7 @@
       <workItem from="1736597189581" duration="11208000" />
       <workItem from="1736707173657" duration="3375000" />
       <workItem from="1736940135668" duration="2857000" />
-      <workItem from="1737096215355" duration="8036000" />
+      <workItem from="1737096215355" duration="12387000" />
     </task>
     <task id="LOCAL-00001" summary="Primeiro commit. Criação do Ambiente.&#10;Ambiente é gerado com a opção de perguntar o ratio de bombas antes da geração.">
       <option name="closed" value="true" />
@@ -258,7 +259,15 @@
       <option name="project" value="LOCAL" />
       <updated>1737106680393</updated>
     </task>
-    <option name="localTasksCounter" value="19" />
+    <task id="LOCAL-00019" summary="16. Slight improvements to the code.">
+      <option name="closed" value="true" />
+      <created>1737108071340</created>
+      <option name="number" value="00019" />
+      <option name="presentableId" value="LOCAL-00019" />
+      <option name="project" value="LOCAL" />
+      <updated>1737108071340</updated>
+    </task>
+    <option name="localTasksCounter" value="20" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -294,10 +303,11 @@
     <MESSAGE value="15.1. Created Cell class. Return to this commit in case you need to reset." />
     <MESSAGE value="15.2. Implemented cell class into environment. Now instead of working with a matrix of strings. We are working with a matrix of Cell objects.&#10;&#10;Because of this, we need to fix the interaction, as agents are expecting to interact with strings." />
     <MESSAGE value="15.3. Turned all code into OOP but i need to fix the consume_all_treasures parameter" />
-    <option name="LAST_COMMIT_MESSAGE" value="15.3. Turned all code into OOP but i need to fix the consume_all_treasures parameter" />
+    <MESSAGE value="16. Slight improvements to the code." />
+    <option name="LAST_COMMIT_MESSAGE" value="16. Slight improvements to the code." />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/IA2025$main.coverage" NAME="main Coverage Results" MODIFIED="1737107648279" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
+    <SUITE FILE_PATH="coverage/IA2025$main.coverage" NAME="main Coverage Results" MODIFIED="1737112729772" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/IA2025$environment.coverage" NAME="environment Coverage Results" MODIFIED="1736783737508" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/IA2025$entry_parameters.coverage" NAME="entry_parameters Coverage Results" MODIFIED="1736940572510" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/IA2025$agent.coverage" NAME="agent Coverage Results" MODIFIED="1736631951982" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />

@@ -74,9 +74,11 @@ class Agent:
             print(f"{self.name} found a treasure! Empowerment acquired.")
             self.empowered += 1  # Agent becomes empowered
             self.consumed_treasures.add((x, y))  # Mark this treasure as consumed
+            cell.discover()
+
+            cell.consume_treasure(self.consume_all_treasure)  # Treasure is consumed
 
             if self.consume_all_treasure:
-                cell.consume_treasure()  # Treasure is consumed
                 self.ghost_env.update_ghost_environment(x, y, 'L')
             else:
                 self.ghost_env.update_ghost_environment(x, y, 'T')

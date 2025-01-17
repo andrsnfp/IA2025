@@ -10,6 +10,7 @@ class EnvironmentManager:
         self.total_cells = (self.rows * self.cols) - self.num_treasures
         self.num_bombs = int(bombs_ratio * self.total_cells)
         self.num_free_cells = self.total_cells - self.num_bombs
+        self.cells_to_discover = self.num_free_cells + self.num_treasures
         self.approach = approach
         self.agents = agents
         self.grid = self.generate_grid()
@@ -38,12 +39,17 @@ class EnvironmentManager:
 
         # Mark agents' starting positions
         for x, y in self.agents:
-            grid[x][y] = Cell('L', (x, y))
+            grid[x][y] = Cell('L', (x, y)) # Create the agent's starting cell
+            grid[x][y].discover() # Mark the cell as discovered
 
         return grid
 
+    # Helper functions for verification of success
     def count_consumed_treasures(self):
-        return sum(1 for row in self.grid for cell in row if cell.type == 'T' and cell.is_consumed)
+        return sum(1 for row in self.grid for cell in row if (cell.type == 'T' or 'L') and cell.is_consumed)
+
+    def count_discovered_cells(self):
+        return sum(1 for row in self.grid for cell in row if cell.is_discovered)
 
     def is_flag_found(self):
         return any (cell.type == 'F' and cell.is_flag_found for row in self.grid for cell in row)
@@ -52,6 +58,12 @@ class EnvironmentManager:
         if self.approach == 'A' and self.count_consumed_treasures() > self.num_treasures // 2:
             # Count discovered and consumed treasures
             return 0
+
+        elif self.approach == 'B':
+            # Success if all L and T cells are discovered
+            total_discoverable_cells = self.num_free_cells + self.num_treasures
+            if self.count_discovered_cells() == total_discoverable_cells:
+                return 0  # Success
 
         if self.approach == 'C' and self.is_flag_found():
             return 0
@@ -78,18 +90,18 @@ class EnvironmentManager:
             tk.Label(env_window, text="FAILURE", font=("Arial", 24), fg="red").pack(expand=True)
 
         def update_grid():
-            for r in range(self.rows):
-                for c in range(self.cols):
-                    cell = self.grid[r][c]
+            for row in range(self.rows):
+                for col in range(self.cols):
+                    cell = self.grid[row][col]
                     color = cell.display_color()
 
                     agent_here = None
                     for agent in agents:
-                        if agent.alive and agent.position == (r, c):
+                        if agent.alive and agent.position == (row, col):
                             color = "pink"
                             agent_here = agent.name
 
-                    labels[r][c].config(bg=color, text=agent_here if agent_here else cell.type) #type: ignore
+                    labels[row][col].config(bg=color, text=agent_here if agent_here else cell.type) #type: ignore
 
             # Check success or failure
             result = self.verify_success(agents)
@@ -98,11 +110,11 @@ class EnvironmentManager:
             if result == 1:
                 display_failure()
 
-        def move_agent(agent, direction):
-            if not agent.alive:
-                print(f"{agent.name} is destroyed in {agent.position} and cannot move.")
+        def move_agent(moving_agent, direction):
+            if not moving_agent.alive:
+                print(f"{moving_agent.name} is destroyed in {moving_agent.position} and cannot move.")
                 return
-            agent.move(direction, self.grid)
+            moving_agent.move(direction, self.grid)
             update_grid()
 
         # GUI setup

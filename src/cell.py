@@ -10,10 +10,11 @@ class Cell:
     def discover(self):
         self.is_discovered = True
 
-    def consume_treasure(self):
+    def consume_treasure(self, consume_all):
         if self.type in 'T' and not self.is_consumed:
             self.is_consumed = True
-            self.change_cell_type('L')
+            if consume_all:
+                self.change_cell_type('L')
             return True
         return False
 
