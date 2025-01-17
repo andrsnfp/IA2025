@@ -67,7 +67,7 @@ def setup_entry_parameters():
 # Function to start the environment creation after collecting parameters
 def start_environment(num_agents, num_treasures, bomb_ratio, approach, consume_all_treasure):
     # Generate the environment
-    agent_positions = tuple((random.randint(0,9),random.randint(0,9)) for _ in range(num_agents))
+    agent_positions = tuple((random.randint(0,0),random.randint(0,9)) for _ in range(num_agents))
 
     env = EnvironmentManager(agent_positions, num_treasures, bomb_ratio, approach)
     env.generate_grid()

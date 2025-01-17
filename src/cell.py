@@ -36,7 +36,7 @@ class Cell:
 
     def display_color(self):
         if self.type == 'L': return "white"
-        if self.type == 'B': return "red"
+        if self.type == 'B': return "light coral"
         if self.type == 'T': return "gold"
         if self.type == 'F': return "green"
 

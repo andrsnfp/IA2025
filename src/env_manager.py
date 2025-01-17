@@ -65,7 +65,7 @@ class EnvironmentManager:
             if self.count_discovered_cells() == total_discoverable_cells:
                 return 0  # Success
 
-        if self.approach == 'C' and self.is_flag_found():
+        elif self.approach == 'C' and self.is_flag_found():
             return 0
 
         if all(not agent.alive for agent in agents):
@@ -98,7 +98,7 @@ class EnvironmentManager:
                     agent_here = None
                     for agent in agents:
                         if agent.alive and agent.position == (row, col):
-                            color = "pink"
+                            color = "purple"
                             agent_here = agent.name
 
                     labels[row][col].config(bg=color, text=agent_here if agent_here else cell.type) #type: ignore

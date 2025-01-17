@@ -1,4 +1,3 @@
-# from simulation_start import *
 from simulation_start import *
 
 if __name__ == "__main__":
