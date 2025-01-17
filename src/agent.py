@@ -3,17 +3,17 @@ class Agent:
         self.name = name
         self.position = position
         self.alive = True # Tracks if the agent is alive
-        self.empowered = False # Tracks if the agent has empowerment
+        self.empowered = 0 # Tracks the amount of empowerment the agent has
         self.consume_all_treasure = consume_all_treasure
         self.consumed_treasures = set() # Tracks treasure cells already used to avoid exploits
         self.ghost_env = ghost_env
 
-    def move(self, direction, environment, found_treasures, flag_found):
+    def move(self, direction, grid):
         if not self.alive:
             print(f"{self.name} is destroyed and cannot move.")
             return self.position
 
-        rows, cols = len(environment), len(environment[0])
+        rows, cols = len(grid), len(grid[0])
         x, y = self.position
 
         # Determine new position based on direction
@@ -30,7 +30,7 @@ class Agent:
             return self.position
 
         #interact with the cell at the new position
-        self.interact(environment, x, y, found_treasures, flag_found)
+        self.interact(grid, x, y)
 
         # Update position
         self.position = (x, y)
@@ -38,28 +38,28 @@ class Agent:
 
         return self.position
 
-    def interact(self, environment, x, y, found_treasures, flag_found):
-        cell = environment[x][y]
+    def interact(self, grid, x, y):
+        cell = grid[x][y]
 
-        if cell == 'L':
-            self.interact_with_l(x, y)
-        elif cell == 'B':
-            self.interact_with_b(environment, x, y)
-        elif cell == 'T':
-            self.interact_with_t(environment, x, y, found_treasures)
-        elif cell == 'F':
-            self.interact_with_f(x, y, flag_found)
+        if cell.type == 'L':
+            self.interact_with_l(cell, x, y)
+        elif cell.type == 'B':
+            self.interact_with_b(cell, x, y)
+        elif cell.type == 'T':
+            self.interact_with_t(cell, x, y)
+        elif cell.type == 'F':
+            self.interact_with_f(cell, x, y)
 
-    def interact_with_l(self, x, y):
+    def interact_with_l(self, cell, x, y):
         print(f"{self.name} moved to a free cell.")
-        #ghost_env[x][y] = 'L'
+        cell.discover()
         self.ghost_env.update_ghost_environment(x, y, 'L')
 
-    def interact_with_b(self, environment, x, y):
-        if self.empowered:
+    def interact_with_b(self, cell, x, y):
+        if self.empowered > 0:
             print(f"{self.name} deactivated a bomb using empowerment!")
-            self.empowered = False  # Empowerment is consumed
-            environment[x][y] = 'L'  # Update real environment
+            self.empowered -= 1  # Empowerment is consumed
+            cell.destroy_bomb()  # Update real environment
             self.ghost_env.update_ghost_environment(x, y, 'L')
         else:
             print(f"{self.name} hit a bomb and is destroyed!")
@@ -67,23 +67,21 @@ class Agent:
             if self.consume_all_treasure:
                 self.ghost_env.update_ghost_environment(x, y, 'B')
 
-    def interact_with_t(self, environment, x, y, found_treasures):
+    def interact_with_t(self, cell, x, y):
         if (x, y) in self.consumed_treasures:
             print(f"{self.name} stepped on an already consumed treasure. No effect.")
         else:
             print(f"{self.name} found a treasure! Empowerment acquired.")
-            self.empowered = True  # Agent becomes empowered
+            self.empowered += 1  # Agent becomes empowered
             self.consumed_treasures.add((x, y))  # Mark this treasure as consumed
 
             if self.consume_all_treasure:
-                environment[x][y] = 'L'  # Treasure is consumed
+                cell.consume_treasure()  # Treasure is consumed
                 self.ghost_env.update_ghost_environment(x, y, 'L')
             else:
                 self.ghost_env.update_ghost_environment(x, y, 'T')
-            # Increment found treasures
-            found_treasures[0] += 1
 
-    def interact_with_f(self, x, y, flag_found):
+    def interact_with_f(self, cell, x, y):
         print(f"{self.name} reached the flag! Success!")
+        cell.found_the_flag()
         self.ghost_env.update_ghost_environment(x, y, 'F')
-        flag_found[0] = True  # Update flag status

@@ -3,8 +3,9 @@ class Cell:
         self.type = cell_type  # 'L', 'B', 'T', or 'F'
         self.position = position  # (row, column)
         self.is_discovered = False  # Tracks if the cell is discovered
-        self.is_consumed = False if self.type in 'T' else None  # Only applicable for treasures
-        self.is_destroyed = False if self.type in 'B' else None # Only applicable for bombs
+        self.is_consumed =  False  # Only applicable for treasures
+        self.is_destroyed = False  # Only applicable for bombs
+        self.is_flag_found = False # Only applicable for the flag
 
     def discover(self):
         self.is_discovered = True
@@ -12,14 +13,25 @@ class Cell:
     def consume_treasure(self):
         if self.type in 'T' and not self.is_consumed:
             self.is_consumed = True
+            self.change_cell_type('L')
             return True
         return False
 
     def destroy_bomb(self):
         if self.type in 'B' and not self.is_destroyed:
             self.is_destroyed = True
+            self.change_cell_type('L')
             return True
         return False
+
+    def found_the_flag(self):
+        if self.type in 'F' and not self.is_flag_found:
+            self.is_flag_found = True
+            return True
+        return False
+
+    def change_cell_type(self, cell_type):
+        self.type = cell_type
 
     def __repr__(self):
         """

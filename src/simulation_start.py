@@ -1,8 +1,8 @@
-from environment import *
 from agent import Agent
 from ghost_environment import GhostEnvironment
-from env import EnvironmentManager
+from env_manager import EnvironmentManager
 import random
+import tkinter as tk
 
 # Function to handle entry parameters
 def setup_entry_parameters():
@@ -68,7 +68,9 @@ def setup_entry_parameters():
 def start_environment(num_agents, num_treasures, bomb_ratio, approach, consume_all_treasure):
     # Generate the environment
     agent_positions = tuple((random.randint(0,9),random.randint(0,9)) for _ in range(num_agents))
-    environment = generate_environment(agent_positions, num_treasures, bomb_ratio, approach)
+
+    env = EnvironmentManager(agent_positions, num_treasures, bomb_ratio, approach)
+    env.generate_grid()
 
     # Generate ghost_environment
     ghost_env = GhostEnvironment()
@@ -78,9 +80,6 @@ def start_environment(num_agents, num_treasures, bomb_ratio, approach, consume_a
     # Initialize the agents
     agents = [Agent(f"A{i+1}", agent_positions[i],consume_all_treasure, ghost_env) for i in range(num_agents)]
 
-    # Initialize treasure tracking
-    found_treasures = [0]
-
     #Displaying the environment
-    display_environment(environment, agents, approach,num_treasures, found_treasures)
+    env.display(agents)
 
