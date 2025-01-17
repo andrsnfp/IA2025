@@ -42,32 +42,24 @@ class EnvironmentManager:
 
         return grid
 
-    def update_cell(self, x, y, new_type):
-        self.grid[x][y].type = new_type
-        self.grid[x][y].discover()
+    def count_consumed_treasures(self):
+        return sum(1 for row in self.grid for cell in row if cell.type == 'T' and cell.is_consumed)
+
+    def is_flag_found(self):
+        return any (cell.type == 'F' and cell.is_flag_found for row in self.grid for cell in row)
 
     def verify_success(self, agents):
-        if self.approach == 'A':
+        if self.approach == 'A' and self.count_consumed_treasures() > self.num_treasures // 2:
             # Count discovered and consumed treasures
-            discovered_treasures = sum(
-                1 for row in self.grid for cell in row if cell.type == 'T' and cell.is_consumed
-            )
-            # Check if >50% of treasures have been found
-            if discovered_treasures > self.num_treasures // 2:
-                return 0
+            return 0
 
-        elif self.approach == 'C':
-            # Check if the flag has been found
-            for row in self.grid:
-                for cell in row:
-                    if cell.type == 'F' and cell.is_flag_found:
-                        return 0
+        if self.approach == 'C' and self.is_flag_found():
+            return 0
 
-        # If no success condition is met, check for failure (all agents are dead)
         if all(not agent.alive for agent in agents):
             return 1
-        else:
-            return 2
+
+        return
 
     def display(self, agents):
         # Tkinter window setup
@@ -89,16 +81,7 @@ class EnvironmentManager:
             for r in range(self.rows):
                 for c in range(self.cols):
                     cell = self.grid[r][c]
-                    color = "white"
-
-                    if cell.type == 'L':
-                        color = "white"
-                    elif cell.type == 'B':
-                        color = "red"
-                    elif cell.type == 'T':
-                        color = "gold"
-                    elif cell.type == 'F':
-                        color = "green"
+                    color = cell.display_color()
 
                     agent_here = None
                     for agent in agents:
@@ -109,9 +92,10 @@ class EnvironmentManager:
                     labels[r][c].config(bg=color, text=agent_here if agent_here else cell.type) #type: ignore
 
             # Check success or failure
-            if self.verify_success(agents) == 0:
+            result = self.verify_success(agents)
+            if result == 0:
                 display_success()
-            if self.verify_success(agents) == 1:
+            if result == 1:
                 display_failure()
 
         def move_agent(agent, direction):

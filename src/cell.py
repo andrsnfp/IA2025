@@ -33,13 +33,13 @@ class Cell:
     def change_cell_type(self, cell_type):
         self.type = cell_type
 
-    def __repr__(self):
-        """
-        String representation of the Cell object for debugging.
+    def display_color(self):
+        if self.type == 'L': return "white"
+        if self.type == 'B': return "red"
+        if self.type == 'T': return "gold"
+        if self.type == 'F': return "green"
 
-        Returns:
-            str: Representation of the cell's type and state.
-        """
+    def __repr__(self):
         status = "Discovered" if self.is_discovered else "Undiscovered"
         consumed_status = f", Consumed" if self.is_consumed else ""
         return f"Cell({self.type}, {status}{consumed_status}, Position={self.position})"
