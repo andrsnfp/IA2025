@@ -17,4 +17,4 @@ class GhostEnvironment:
     def print_ghost_environment(self):
         # Prints the ghost environment in a readable format.
         for row in self.ghost_env:
-            print(" ".join(row))
+            print("  ".join(row))
