@@ -110,11 +110,11 @@ class EnvironmentManager:
             if result == 1:
                 display_failure()
 
-        def move_agent(moving_agent, direction):
+        def move_agent(moving_agent, move):
             if not moving_agent.alive:
                 print(f"{moving_agent.name} is destroyed in {moving_agent.position} and cannot move.")
                 return
-            moving_agent.move(direction, self.grid)
+            moving_agent.move(move, self.grid)
             update_grid()
 
         # GUI setup

@@ -96,11 +96,11 @@ def establish_ai_data():
         dataset[column] = label_encoder.fit_transform(dataset[column])
 
     # split dataset into features (x) and targets (y)
-    x = dataset.iloc[:, 0:4]  # First 4 columns as features
+    X = dataset.iloc[:, 0:4]  # First 4 columns as features
     y = dataset.iloc[:, 4]  # Fifth column as the target
-    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.3, random_state = 7)
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 42)
 
-    ai_data = x_train, y_train, label_encoder
+    ai_data = X_train, y_train, label_encoder
 
     return ai_data
 
@@ -161,7 +161,7 @@ def start_simulation(num_agents, num_treasures, bomb_ratio, approach, consume_al
     ghost_env.initialize_ghost_environment(agent_positions)
     ghost_env.print_ghost_environment()
 
-    # Initialize the agents (agent2.py)
+    # Initialize the agents
     # agents = [Agent(f"A{i+1}", agent_positions[i],consume_all_treasure, ghost_env) for i in range(num_agents)]
 
     # Initialize the agents (agent.py)

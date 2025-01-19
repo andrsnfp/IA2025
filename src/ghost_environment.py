@@ -14,6 +14,13 @@ class GhostEnvironment:
         # Updates ghost environment at position (x, y) with the given value.
         self.ghost_env[x][y] = value
 
+    def get_cell_value(self, x, y):
+        # Boundary check
+        if 0 <= x < len(self.ghost_env) and 0 <= y < len(self.ghost_env[0]):
+            return self.ghost_env[x][y]
+        else:
+            return "-"
+
     def print_ghost_environment(self):
         # Prints the ghost environment in a readable format.
         for row in self.ghost_env:
