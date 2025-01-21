@@ -1,23 +1,55 @@
+import itertools
 import pandas as pd
 
-# Example data
-data = [
-    {"left": "B", "right": "B", "up": "B", "down": "L", "Move": "down"},
-    {"left": "L", "right": "T", "up": "B", "down": "B", "Move": "right"},
-    {"left": "T", "right": "B", "up": "L", "down": "B", "Move": "left"},
-    {"left": "L", "right": "L", "up": "B", "down": "B", "Move": "left"},
-    {"left": "L", "right": "B", "up": "T", "down": "L", "Move": "up"},
-    {"left": "B", "right": "L", "up": "B", "down": "T", "Move": "down"},
-    {"left": "B", "right": "B", "up": "T", "down": "L", "Move": "up"},
-    {"left": "T", "right": "L", "up": "B", "down": "B", "Move": "left"},
-    {"left": "L", "right": "L", "up": "T", "down": "T", "Move": "down"},
-    {"left": "T", "right": "T", "up": "L", "down": "L", "Move": "right"},
-]
+# Rules for determining the best move
+def determine_best_move(left, right, up, down):
+    # Define the priority of moves
+    cell_priority = ["T", "L", "?"]  # Prioritize treasure, then free cells, then unknown
+    move_options = {
+        "left": left,
+        "right": right,
+        "up": up,
+        "down": down
+    }
 
-# Convert to DataFrame
-df = pd.DataFrame(data)
+    # Filter moves based on priority
+    for cell_type in cell_priority:
+        for direction, cell in move_options.items():
+            if cell == cell_type:
+                return direction
 
-# Save to CSV
-df.to_csv("dataset.csv", index=False)
+    # If no valid move, return None (shouldn't happen with valid input)
+    return None
 
-print("CSV file saved as 'dataset.csv'")
+# Generate dataset
+def generate_dataset(output_file):
+    # Define possible values for each position
+    cell_values = ["L", "B", "T", "-", "?"]
+    all_combinations = itertools.product(cell_values, repeat=4)
+
+    data = []
+
+    for combination in all_combinations:
+        left, right, up, down = combination
+
+        # Skip invalid combinations where all moves are "-" or "B"
+        if all(cell in ["-", "B"] for cell in combination):
+            continue
+
+        # Determine the best move
+        move = determine_best_move(left, right, up, down)
+
+        # Add the entry to the dataset
+        data.append({"left": left, "right": right, "up": up, "down": down, "Move": move})
+
+    # Convert to DataFrame
+    df = pd.DataFrame(data)
+
+    # Save to CSV
+    df.to_csv(output_file, index=False)
+    print(f"Dataset written to {output_file} with {len(df)} rows.")
+
+# Main function
+if __name__ == "__main__":
+    output_file = "dataset.csv"
+    generate_dataset(output_file)

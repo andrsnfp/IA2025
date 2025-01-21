@@ -12,7 +12,7 @@ class EnvironmentManager:
         self.num_free_cells = self.total_cells - self.num_bombs
         self.cells_to_discover = self.num_free_cells + self.num_treasures
         self.approach = approach
-        self.agents = agents
+        self.agents = agents # Position of all agents
         self.grid = self.generate_grid()
 
     def generate_grid(self):
@@ -110,11 +110,11 @@ class EnvironmentManager:
             if result == 1:
                 display_failure()
 
-        def move_agent(moving_agent, move):
-            if not moving_agent.alive:
-                print(f"{moving_agent.name} is destroyed in {moving_agent.position} and cannot move.")
+        def move_agent(agent, move):
+            if not agent.alive:
+                print(f"{agent.name} is destroyed in {agent.position} and cannot move.")
                 return
-            moving_agent.move(move, self.grid)
+            agent.move(move, self.grid)
             update_grid()
 
         # GUI setup

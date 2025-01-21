@@ -20,7 +20,7 @@ def setup_entry_parameters():
 
     # Number of Agents Selection
     tk.Label(root, text="Select the number of agents:", font=("Arial", 12)).pack(pady=10)
-    num_agents_var = tk.IntVar(value=1)  # Default value
+    num_agents_var = tk.IntVar(value=2)  # Default value
     tk.Scale(root, from_=1, to=10, orient=tk.HORIZONTAL, variable=num_agents_var).pack()
 
     # Number of Treasures Selection
@@ -88,17 +88,18 @@ def setup_entry_parameters():
 
 def establish_ai_data():
     # Loading the dataset
-    dataset = pd.read_csv('training_data/dataset.csv', delimiter=',')
+    dataset = pd.read_csv('training_data/dataset.csv', delimiter = ',')
 
     # Encode categorical features ('L', 'B') into numerical values
     label_encoder = LabelEncoder()
-    for column in dataset.columns[:-1]:  # Apply encoding to all feature columns
+    columns_to_encode = ['left','right','up','down']
+    for column in columns_to_encode:  # Apply encoding to all feature columns
         dataset[column] = label_encoder.fit_transform(dataset[column])
 
     # split dataset into features (x) and targets (y)
-    X = dataset.iloc[:, 0:4]  # First 4 columns as features
-    y = dataset.iloc[:, 4]  # Fifth column as the target
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.3, random_state = 42)
+    X = dataset[['left','right','up','down']].values  # First 4 columns as features
+    y = dataset['Move'].values  # Fifth column as the target
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.8, random_state = 42)
 
     ai_data = X_train, y_train, label_encoder
 

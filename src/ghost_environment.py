@@ -5,9 +5,9 @@ class GhostEnvironment:
         self.cols = 10
         self.ghost_env = [['?' for _ in range(self.cols)] for _ in range(self.rows)]
 
-    def initialize_ghost_environment(self, agents):
+    def initialize_ghost_environment(self, agent_positions):
         # Initializes the ghost environment with agents placed as 'L'.
-        for x, y in agents:
+        for x, y in agent_positions:
             self.ghost_env[x][y] = 'L'
 
     def update_ghost_environment(self, x, y, value):
