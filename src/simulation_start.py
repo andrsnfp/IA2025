@@ -6,6 +6,8 @@ from sklearn.neighbors import KNeighborsClassifier
 from sklearn.naive_bayes import GaussianNB
 from sklearn.neural_network import MLPClassifier
 
+from sklearn.metrics import confusion_matrix, f1_score, accuracy_score
+
 from agent import Agent
 from ghost_environment import GhostEnvironment
 from env_manager import EnvironmentManager
@@ -92,16 +94,29 @@ def establish_ai_data():
 
     # Encode categorical features ('L', 'B') into numerical values
     label_encoder = LabelEncoder()
-    columns_to_encode = ['left','right','up','down']
-    for column in columns_to_encode:  # Apply encoding to all feature columns
+    for column in dataset.columns[:-1]:  # Apply encoding to all feature columns
         dataset[column] = label_encoder.fit_transform(dataset[column])
 
     # split dataset into features (x) and targets (y)
-    X = dataset[['left','right','up','down']].values  # First 4 columns as features
-    y = dataset['Move'].values  # Fifth column as the target
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.8, random_state = 42)
+    X = dataset.iloc[:, 0:4]  # First 4 columns as features
+    y = dataset.iloc[:, 4]  # Fifth column as the target
+    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
 
     ai_data = X_train, y_train, label_encoder
+
+    # classifier = KNeighborsClassifier(n_neighbors=7, p=2, metric='euclidean')
+    # classifier.fit(X_train, y_train)
+    # y_pred = classifier.predict(X_test)
+    #
+    # # Evaluate the model
+    # cm = confusion_matrix(y_test, y_pred)
+    # print("Confusion Matrix:\n", cm)
+    #
+    # f1 = f1_score(y_test, y_pred, average='macro')
+    # print("F1 Score:", f1)
+    #
+    # accuracy = accuracy_score(y_test, y_pred)
+    # print("Accuracy:", accuracy)
 
     return ai_data
 
@@ -111,26 +126,27 @@ def initialize_agents(num_agents, ai_models, agent_positions, consume_all_treasu
     agents = []
 
     if ai_models == "KNN":
-        ai_model = KNeighborsClassifier()
+        ai_model = KNeighborsClassifier(n_neighbors = 21, p = 2, metric = 'euclidean')
+        ai_model.fit(training_data, action_labels)
         agents = [
-            Agent(f"A{i + 1}", agent_positions[i], consume_all_treasure, ghost_env, ai_model, training_data,
-                  action_labels, encoder)
+            Agent(f"A{i + 1}", agent_positions[i], consume_all_treasure, ghost_env, ai_model,encoder)
             for i in range(num_agents)
         ]
 
     elif ai_models == "Naive_Bayes":
         ai_model = GaussianNB()
+        ai_model.fit(training_data, action_labels)
+        print("Agents Trained")
         agents = [
-            Agent(f"A{i + 1}", agent_positions[i], consume_all_treasure, ghost_env, ai_model, training_data,
-                  action_labels, encoder)
+            Agent(f"A{i + 1}", agent_positions[i], consume_all_treasure, ghost_env, ai_model,encoder)
             for i in range(num_agents)
         ]
 
     elif ai_models == "MLPClassifier":
         ai_model = MLPClassifier()
+        ai_model.fit(training_data, action_labels)
         agents = [
-            Agent(f"A{i + 1}", agent_positions[i], consume_all_treasure, ghost_env, ai_model, training_data,
-                  action_labels, encoder)
+            Agent(f"A{i + 1}", agent_positions[i], consume_all_treasure, ghost_env, ai_model,encoder)
             for i in range(num_agents)
         ]
 
@@ -139,9 +155,9 @@ def initialize_agents(num_agents, ai_models, agent_positions, consume_all_treasu
 
         # Round-robin assignment of models to agents
         agent_models = (models * (num_agents // 3)) + [KNeighborsClassifier()] * (num_agents % 3)
+        agent_models.fit(training_data, action_labels)
         agents = [
-            Agent(f"A{i + 1}", agent_positions[i], consume_all_treasure, ghost_env, agent_models[i], training_data,
-                  action_labels, encoder)
+            Agent(f"A{i + 1}", agent_positions[i], consume_all_treasure, ghost_env, agent_models[i],encoder)
             for i in range(num_agents)
         ]
 

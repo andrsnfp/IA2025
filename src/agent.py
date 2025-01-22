@@ -1,7 +1,7 @@
 import random
 
 class Agent:
-    def __init__(self, name, position, consume_all_treasure, ghost_env, ai_model, training_data, action_labels, encoder):
+    def __init__(self, name, position, consume_all_treasure, ghost_env, ai_model, encoder):
         self.name = name
         self.position = position
         self.previous_positions = [] # Tracks previous positions to prevent loops
@@ -12,17 +12,17 @@ class Agent:
         self.ghost_env = ghost_env
         self.ai_model = ai_model
         self.encoder = encoder
-        self.train(training_data, action_labels)
 
     def get_neighboring_cells(self):
         x, y = self.position
-        neighbors = {
-            "up": self.ghost_env.get_cell_value(x - 1, y) if (x - 1 >= 0) else '-',
-            "down": self.ghost_env.get_cell_value(x + 1, y) if (x + 1 < 9) else '-',
-            "left": self.ghost_env.get_cell_value(x, y - 1) if (y - 1 >= 0) else '-',
-            "right": self.ghost_env.get_cell_value(x, y + 1) if (y + 1 < 9) else '-'
-        }
 
+        up = self.ghost_env.get_cell_value(x - 1, y) if (x - 1 >= 0) else '-'
+        down = self.ghost_env.get_cell_value(x + 1, y) if (x + 1 < 9) else '-'
+        left = self.ghost_env.get_cell_value(x, y - 1) if (y - 1 >= 0) else '-'
+        right = self.ghost_env.get_cell_value(x, y + 1) if (y + 1 < 9) else '-'
+
+        neighbors = [left, right, up, down]
+        print(neighbors)
         return neighbors
 
     def is_within_bounds(self, position, grid):
@@ -31,13 +31,13 @@ class Agent:
 
     def ai_move(self):
         neighboring_cells = self.get_neighboring_cells()
-        encoded_data = self.encoder.fit_transform(list(neighboring_cells.values()))
-        move = self.ai_model.predict(encoded_data.reshape(1, -1))
-        return move[0]
 
-    def train(self, training_data, action_labels):
-        self.ai_model.fit(training_data, action_labels)
-        print(self.name, ' Trained')
+        # Ensure neighboring_cells is a dictionary with correct feature names
+        data = self.encoder.fit_transform(neighboring_cells)
+
+        # Predict using the AI model
+        move = self.ai_model.predict(data.reshape(1,-1))[0]
+        return move
 
     def move(self, move, grid):
         if not self.alive:
@@ -50,15 +50,15 @@ class Agent:
 
         x, y = self.position
         neighboring_cells = self.get_neighboring_cells()
-        direction_mapping = {
+        directions = {
             "up": (x - 1, y),
             "down": (x + 1, y),
             "left": (x, y - 1),
             "right": (x, y + 1)
         }
 
-        #move = self.ai_move()
-        new_position = direction_mapping.get(move)
+        move = self.ai_move()
+        new_position = directions.get(move)
 
         # Ensure new position is valid and not out of bounds
         if not self.is_within_bounds(new_position, grid):
@@ -67,10 +67,10 @@ class Agent:
 
         # Prevent revisiting the most recent previous position
         if len(self.previous_positions) == 2 and new_position == self.previous_positions[0]:
-            valid_moves = [d for d, cell in neighboring_cells.items() if cell != '-' and cell != "B"]
+            valid_moves = [directions[i] for i, cell in enumerate(neighboring_cells) if cell != '-' and cell != "B"]
             if valid_moves:
                 move = random.choice(valid_moves)
-                new_position = direction_mapping.get(move)
+                new_position = directions.get(move)
 
         # Interact with the new cell
         self.interact(grid, *new_position)
