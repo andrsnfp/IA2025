@@ -29,6 +29,10 @@ class Agent:
         x, y = position
         return 0 <= x < len(grid) and 0 <= y < len(grid[0])
 
+    def predict(self, data):
+        data_to_encode = self.encoder.transform(data)
+        return self.ai_model.predict(data_to_encode.reshape(1, -1))
+
     def ai_move(self):
         neighboring_cells = self.get_neighboring_cells()
 
@@ -39,17 +43,17 @@ class Agent:
         move = self.ai_model.predict(data.reshape(1,-1))[0]
         return move
 
-    def move(self, move, grid):
-        if not self.alive:
-            print(f"{self.name} is destroyed and cannot move.")
-            return self.position
-
+    def move(self, grid):
         if len(self.previous_positions) == 2:
             self.previous_positions.pop(0)
         self.previous_positions.append(self.position)
 
         x, y = self.position
+
         neighboring_cells = self.get_neighboring_cells()
+        move = self.predict(neighboring_cells)[0]
+        print(move)
+
         directions = {
             "up": (x - 1, y),
             "down": (x + 1, y),
@@ -57,7 +61,6 @@ class Agent:
             "right": (x, y + 1)
         }
 
-        move = self.ai_move()
         new_position = directions.get(move)
 
         # Ensure new position is valid and not out of bounds
@@ -65,15 +68,22 @@ class Agent:
             print(f"{self.name}: Move '{move}' is out of bounds. Skipping move.")
             return self.position
 
-        # Prevent revisiting the most recent previous position
-        if len(self.previous_positions) == 2 and new_position == self.previous_positions[0]:
-            valid_moves = [directions[i] for i, cell in enumerate(neighboring_cells) if cell != '-' and cell != "B"]
-            if valid_moves:
-                move = random.choice(valid_moves)
-                new_position = directions.get(move)
-
+        if len(self.previous_positions) == 2:
+            while new_position == self.previous_positions[0]:
+                possible_moves = [value for value in neighboring_cells if value != '-']
+                new_move = random.choice(possible_moves)
+                new_position = (
+                    (x + 1, y) if new_move == 'down' else (
+                        (x - 1, y) if new_move == 'up' else (
+                            (x, y + 1) if new_move == 'right' else
+                            (x, y - 1)
+                        )
+                    )
+                )
+        print(new_position)
         # Interact with the new cell
-        self.interact(grid, *new_position)
+        x, y = new_position
+        self.interact(grid, x, y)
 
         # Update position
         self.position = new_position

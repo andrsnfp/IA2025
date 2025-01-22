@@ -22,12 +22,12 @@ def setup_entry_parameters():
 
     # Number of Agents Selection
     tk.Label(root, text="Select the number of agents:", font=("Arial", 12)).pack(pady=10)
-    num_agents_var = tk.IntVar(value=2)  # Default value
+    num_agents_var = tk.IntVar(value=10)  # Default value
     tk.Scale(root, from_=1, to=10, orient=tk.HORIZONTAL, variable=num_agents_var).pack()
 
     # Number of Treasures Selection
     tk.Label(root, text="Select the number of treasures:", font=("Arial", 12)).pack(pady=10)
-    num_treasures_var = tk.IntVar(value=10)  # Default value
+    num_treasures_var = tk.IntVar(value=14)  # Default value
     tk.Scale(root, from_=8, to=14, orient=tk.HORIZONTAL, variable=num_treasures_var).pack()
 
     # Bomb Ratio Selection
@@ -98,15 +98,15 @@ def establish_ai_data():
         dataset[column] = label_encoder.fit_transform(dataset[column])
 
     # split dataset into features (x) and targets (y)
-    X = dataset.iloc[:, 0:4]  # First 4 columns as features
-    y = dataset.iloc[:, 4]  # Fifth column as the target
-    X_train, X_test, y_train, y_test = train_test_split(X, y, test_size = 0.2, random_state = 0)
+    x = dataset[['left','right','up','down']].values  # First 4 columns as features
+    y = dataset['Move']  # Fifth column as the target
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.2, random_state = 42)
 
-    ai_data = X_train, y_train, label_encoder
+    ai_data = x_train, y_train, label_encoder
 
     # classifier = KNeighborsClassifier(n_neighbors=7, p=2, metric='euclidean')
-    # classifier.fit(X_train, y_train)
-    # y_pred = classifier.predict(X_test)
+    # classifier.fit(x_train, y_train)
+    # y_pred = classifier.predict(x_test)
     #
     # # Evaluate the model
     # cm = confusion_matrix(y_test, y_pred)
@@ -168,23 +168,19 @@ def start_simulation(num_agents, num_treasures, bomb_ratio, approach, consume_al
     # Pre-processing for the agents
     training_data, action_labels, encoder = establish_ai_data()
 
-    # Generate the environment
-    agent_positions = tuple((random.randint(0,0),random.randint(0,9)) for _ in range(num_agents))
-    env = EnvironmentManager(agent_positions, num_treasures, bomb_ratio, approach)
-    env.generate_grid()
-
     # Generate ghost_environment
+    agent_positions = tuple((random.randint(0,0),random.randint(0,9)) for _ in range(num_agents))
     ghost_env = GhostEnvironment()
     ghost_env.initialize_ghost_environment(agent_positions)
     ghost_env.print_ghost_environment()
-
-    # Initialize the agents
-    # agents = [Agent(f"A{i+1}", agent_positions[i],consume_all_treasure, ghost_env) for i in range(num_agents)]
 
     # Initialize the agents (agent.py)
     agents = initialize_agents(num_agents, ai_models, agent_positions, consume_all_treasure, ghost_env,
                                training_data, action_labels, encoder)
 
+    # Generate the environment
+    env = EnvironmentManager(agent_positions, num_treasures, bomb_ratio, approach, agents)
+    env.generate_grid()
+
     #Displaying the environment
     env.display(agents)
-

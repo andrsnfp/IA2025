@@ -1,9 +1,12 @@
 import random
 import tkinter as tk
+import time
 from cell import Cell
 
+delay = 1.5
+
 class EnvironmentManager:
-    def __init__(self, agents, num_treasures, bombs_ratio, approach):
+    def __init__(self, agents_positions, num_treasures, bombs_ratio, approach, agents):
         self.rows = 10
         self.cols = 10
         self.num_treasures = num_treasures
@@ -12,7 +15,8 @@ class EnvironmentManager:
         self.num_free_cells = self.total_cells - self.num_bombs
         self.cells_to_discover = self.num_free_cells + self.num_treasures
         self.approach = approach
-        self.agents = agents # Position of all agents
+        self.agents_positions = agents_positions # Position of all agents
+        self.agents = agents # The Agents running in the environment
         self.grid = self.generate_grid()
 
     def generate_grid(self):
@@ -38,7 +42,7 @@ class EnvironmentManager:
         ]
 
         # Mark agents' starting positions
-        for x, y in self.agents:
+        for x, y in self.agents_positions:
             grid[x][y] = Cell('L', (x, y)) # Create the agent's starting cell
             grid[x][y].discover() # Mark the cell as discovered
 
@@ -107,15 +111,24 @@ class EnvironmentManager:
             result = self.verify_success(agents)
             if result == 0:
                 display_success()
+                return
             if result == 1:
                 display_failure()
-
-        def move_agent(agent, move):
-            if not agent.alive:
-                print(f"{agent.name} is destroyed in {agent.position} and cannot move.")
                 return
-            agent.move(move, self.grid)
-            update_grid()
+
+            move_agent()
+            env_window.after(0, update_grid)
+
+        def move_agent():
+            for agent in self.agents:
+                if not agent.alive:
+                    print(f"{agent.name} is destroyed in {agent.position} and cannot move.")
+                    continue
+
+                # AI determines and executes the move
+                time.sleep(delay)
+                agent.move(self.grid)
+                # update_grid()
 
         # GUI setup
         for r in range(self.rows):
@@ -127,17 +140,17 @@ class EnvironmentManager:
                 label.grid(row=r, column=c)
                 labels[r][c] = label #type: ignore
 
-        controls_frame = tk.Frame(env_window)
-        controls_frame.grid(row=self.rows, column=0, columnspan=self.cols, pady=5)
-
-        for i, agent in enumerate(agents):
-            row_frame = tk.Frame(controls_frame)
-            row_frame.pack(fill="x", pady=5)
-            tk.Label(row_frame, text=f"{agent.name}").pack(side="left", padx=5)
-            tk.Button(row_frame, text="⬆", command=lambda a=agent: move_agent(a, "up")).pack(side="left")
-            tk.Button(row_frame, text="⬅", command=lambda a=agent: move_agent(a, "left")).pack(side="left")
-            tk.Button(row_frame, text="⬇", command=lambda a=agent: move_agent(a, "down")).pack(side="left")
-            tk.Button(row_frame, text="➡", command=lambda a=agent: move_agent(a, "right")).pack(side="left")
+        # controls_frame = tk.Frame(env_window)
+        # controls_frame.grid(row=self.rows, column=0, columnspan=self.cols, pady=5)
+        #
+        # for i, agent in enumerate(agents):
+        #     row_frame = tk.Frame(controls_frame)
+        #     row_frame.pack(fill="x", pady=5)
+        #     tk.Label(row_frame, text=f"{agent.name}").pack(side="left", padx=5)
+        #     tk.Button(row_frame, text="⬆", command=lambda a=agent: move_agent(a, "up")).pack(side="left")
+        #     tk.Button(row_frame, text="⬅", command=lambda a=agent: move_agent(a, "left")).pack(side="left")
+        #     tk.Button(row_frame, text="⬇", command=lambda a=agent: move_agent(a, "down")).pack(side="left")
+        #     tk.Button(row_frame, text="➡", command=lambda a=agent: move_agent(a, "right")).pack(side="left")
 
         update_grid()
         env_window.mainloop()
