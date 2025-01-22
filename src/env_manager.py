@@ -75,7 +75,7 @@ class EnvironmentManager:
         if all(not agent.alive for agent in agents):
             return 1
 
-        return
+        return None
 
     def display(self, agents):
         # Tkinter window setup
@@ -111,24 +111,43 @@ class EnvironmentManager:
             result = self.verify_success(agents)
             if result == 0:
                 display_success()
+                env_window.quit()  # Stop Tkinter loop
                 return
             if result == 1:
                 display_failure()
+                env_window.quit()  # Stop Tkinter loop
                 return
 
-            move_agent()
-            env_window.after(0, update_grid)
+        # def move_agent():
+        #     for agent in self.agents:
+        #         if not agent.alive:
+        #             print(f"{agent.name} is destroyed in {agent.position} and cannot move.")
+        #             continue
+        #
+        #         # AI determines and executes the move
+        #         # time.sleep(delay)
+        #         new_position = agent.move(self.grid)
+        #
+        #         # If an agent's move doesn't change the environment, avoid an infinite loop
+        #         if new_position == agent.position:
+        #             print(f"{agent.name} did not move.")
+        #
+        #         # update_grid()
 
-        def move_agent():
-            for agent in self.agents:
-                if not agent.alive:
-                    print(f"{agent.name} is destroyed in {agent.position} and cannot move.")
-                    continue
+        def move_agents(index):
+            if index >= len(self.agents):  # Stop if all agents have moved
+                env_window.after(100, move_agents, 0)  # Restart loop after 1.5s
+                return
 
-                # AI determines and executes the move
-                time.sleep(delay)
-                agent.move(self.grid)
-                # update_grid()
+            agent = self.agents[index]
+
+            if not agent.alive:
+                print(f"{agent.name} is destroyed in {agent.position} and cannot move.")
+            else:
+                agent.move(self.grid)  # Move only one agent at a time
+
+            update_grid()
+            env_window.after(1000, move_agents, index + 1)  # Call next agent after 1.2s
 
         # GUI setup
         for r in range(self.rows):
@@ -140,8 +159,12 @@ class EnvironmentManager:
                 label.grid(row=r, column=c)
                 labels[r][c] = label #type: ignore
 
-        # controls_frame = tk.Frame(env_window)
-        # controls_frame.grid(row=self.rows, column=0, columnspan=self.cols, pady=5)
+        controls_frame = tk.Frame(env_window)
+        controls_frame.grid(row=self.rows, column=0, columnspan=self.cols, pady=5)
+
+        row_frame = tk.Frame(controls_frame)
+        row_frame.pack(fill="x", pady=5)
+        tk.Button(row_frame, text="Start", command=lambda index=0 : move_agents(index)).pack(side="left")
         #
         # for i, agent in enumerate(agents):
         #     row_frame = tk.Frame(controls_frame)

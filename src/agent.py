@@ -61,7 +61,7 @@ class Agent:
             "right": (x, y + 1)
         }
 
-        new_position = directions.get(move)
+        new_position = directions.get(move, self.position)
 
         # Ensure new position is valid and not out of bounds
         if not self.is_within_bounds(new_position, grid):
@@ -69,21 +69,27 @@ class Agent:
             return self.position
 
         if len(self.previous_positions) == 2:
-            while new_position == self.previous_positions[0]:
+            attempts = 0
+            while new_position == self.previous_positions[0] and attempts < 5:
                 possible_moves = [value for value in neighboring_cells if value != '-']
+
+                if not possible_moves:
+                    print(f"{self.name}: No valid moves left. Staying in place.")
+                    return self.position  # Stay in place if no valid moves
+
                 new_move = random.choice(possible_moves)
-                new_position = (
-                    (x + 1, y) if new_move == 'down' else (
-                        (x - 1, y) if new_move == 'up' else (
-                            (x, y + 1) if new_move == 'right' else
-                            (x, y - 1)
-                        )
-                    )
-                )
-        print(new_position)
+                new_position = directions.get(new_move, self.position)
+                attempts += 1
+
+        print(f"{self.name} moving to {new_position}")
         # Interact with the new cell
         x, y = new_position
-        self.interact(grid, x, y)
+
+        try:
+            self.interact(grid, x, y)
+        except Exception as e:
+            print(f"failed to interact with {self.name}: {e}")
+            return self.position #Prevents breaking the loop
 
         # Update position
         self.position = new_position
