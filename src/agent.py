@@ -43,9 +43,9 @@ class Agent:
         move = self.ai_model.predict(data.reshape(1,-1))[0]
         return move
 
-    def move(self, manual_move, grid):
-        if manual_move:
-            return self.manual_move(manual_move,grid)
+    def move(self, grid):
+        # if manual_move:
+        #     return self.manual_move(manual_move,grid)
 
         if len(self.previous_positions) == 2:
             self.previous_positions.pop(0)

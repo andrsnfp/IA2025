@@ -19,15 +19,15 @@ import pandas as pd
 # Function to handle entry parameters
 def setup_entry_parameters():
     root = tk.Tk()
-    root.title("Parametros")
+    root.title("Escolher Parâmetros")
 
     # Number of Agents Selection
-    tk.Label(root, text="Select the number of agents:", font=("Arial", 12)).pack(pady=10)
+    tk.Label(root, text="Seleccionar o número de agentes:", font=("Arial", 12)).pack(pady=10)
     num_agents_var = tk.IntVar(value=10)  # Default value
     tk.Scale(root, from_=1, to=10, orient=tk.HORIZONTAL, variable=num_agents_var).pack()
 
     # Number of Treasures Selection
-    tk.Label(root, text="Select the number of treasures:", font=("Arial", 12)).pack(pady=10)
+    tk.Label(root, text="Seleccionar o número de tesouros:", font=("Arial", 12)).pack(pady=10)
     num_treasures_var = tk.IntVar(value=14)  # Default value
     tk.Scale(root, from_=8, to=14, orient=tk.HORIZONTAL, variable=num_treasures_var).pack()
 
@@ -35,42 +35,30 @@ def setup_entry_parameters():
     tk.Label(root, text="Seleccionar a percentagem de bombas no ambiente:", font=("Arial", 12)).pack(pady=10)
     bomb_ratio_var = tk.DoubleVar(value=0.5)  # Default value
     bomb_options = {
-        "50% Bombs": 0.5,
-        "60% Bombs": 0.6,
-        "70% Bombs": 0.7,
-        "80% Bombs": 0.8
+        "50% Bombas": 0.5,
+        "60% Bombas": 0.6,
+        "70% Bombas": 0.7,
+        "80% Bombas": 0.8
     }
     for label, value in bomb_options.items():
         tk.Radiobutton(root, text=label, variable=bomb_ratio_var, value=value).pack(anchor="w")
 
     # Approach Selection
-    tk.Label(root, text="Select the approach for the environment:", font=("Arial", 12)).pack(pady=10)
+    tk.Label(root, text="Seleccionar a abordagem a ser usada:", font=("Arial", 12)).pack(pady=10)
     approach_var = tk.StringVar(value="A")  # Default value
     approach_options = {
-        "Approach A": "A",
-        "Approach B": "B",
-        "Approach C": "C"
+        "Abordagem A": "A",
+        "Abordagem B": "B",
+        "Abordagem C": "C"
     }
     for label, value in approach_options.items():
         tk.Radiobutton(root, text=label, variable=approach_var, value=value).pack(anchor="w")
 
     # Consume All Treasure Selection
-    tk.Label(root, text="An Agent will consume all treasure?", font=("Arial", 12)).pack(pady=10)
-    consume_all_treasure_var = tk.BooleanVar(value=True)  # Default is True
+    tk.Label(root, text="Um agente consome todo o tesouro?", font=("Arial", 12)).pack(pady=10)
+    consume_all_treasure_var = tk.BooleanVar(value=False)  # Default is True
     tk.Radiobutton(root, text="Yes", variable=consume_all_treasure_var, value=True).pack(anchor="w")
     tk.Radiobutton(root, text="No", variable=consume_all_treasure_var, value=False).pack(anchor="w")
-
-    # AI Algorithm Selection
-    # tk.Label(root, text="Select the AI Algorithm:", font=("Arial", 12)).pack(pady=10)
-    # ai_algorithm_var = tk.StringVar(value="KNN")  # Default value
-    # ai_algorithm_options = {
-    #     "K-Nearest Neighbors (KNN)": "KNN",
-    #     "Naive Bayes": "Naive_Bayes",
-    #     "Multi-Layer Perceptron": "MLPClassifier",
-    #     "Mixed (10 agents split across types)": "Mixed"
-    # }
-    # for label, value in ai_algorithm_options.items():
-    #     tk.Radiobutton(root, text=label, variable=ai_algorithm_var, value=value).pack(anchor="w")
 
     # Start Button
     def on_start_button():
@@ -83,7 +71,7 @@ def setup_entry_parameters():
         )
         root.destroy()
 
-    tk.Button(root, text="Create Environment", command=on_start_button, bg="blue", fg="white").pack(pady=20)
+    tk.Button(root, text="Criar Ambiente", command=on_start_button, bg="blue", fg="white").pack(pady=20)
 
     # Run the main GUI loop
     root.mainloop()
@@ -211,7 +199,7 @@ def start_simulation(num_agents, num_treasures, bomb_ratio, approach, consume_al
         window.title(title)
         env.display(agents, window)  # Pass the window to the display function
 
-        # Create all environments as separate windows
+    # Create all environments as separate windows
     create_env_window(env_knn, agents_knn, "KNN Environment")
     create_env_window(env_naive_bayes, agents_naive_bayes, "Naive Bayes Environment")
     create_env_window(env_mlpclassifier, agents_mlpclassifier, "MLPClassifier Environment")
