@@ -18,7 +18,7 @@ import pandas as pd
 # Function to handle entry parameters
 def setup_entry_parameters():
     root = tk.Tk()
-    root.title("Ambiente")
+    root.title("Parametros")
 
     # Number of Agents Selection
     tk.Label(root, text="Select the number of agents:", font=("Arial", 12)).pack(pady=10)
@@ -60,26 +60,27 @@ def setup_entry_parameters():
     tk.Radiobutton(root, text="No", variable=consume_all_treasure_var, value=False).pack(anchor="w")
 
     # AI Algorithm Selection
-    tk.Label(root, text="Select the AI Algorithm:", font=("Arial", 12)).pack(pady=10)
-    ai_algorithm_var = tk.StringVar(value="KNN")  # Default value
-    ai_algorithm_options = {
-        "K-Nearest Neighbors (KNN)": "KNN",
-        "Naive Bayes": "Naive_Bayes",
-        "Multi-Layer Perceptron": "MLPClassifier",
-        "Mixed (10 agents split across types)": "Mixed"
-    }
-    for label, value in ai_algorithm_options.items():
-        tk.Radiobutton(root, text=label, variable=ai_algorithm_var, value=value).pack(anchor="w")
+    # tk.Label(root, text="Select the AI Algorithm:", font=("Arial", 12)).pack(pady=10)
+    # ai_algorithm_var = tk.StringVar(value="KNN")  # Default value
+    # ai_algorithm_options = {
+    #     "K-Nearest Neighbors (KNN)": "KNN",
+    #     "Naive Bayes": "Naive_Bayes",
+    #     "Multi-Layer Perceptron": "MLPClassifier",
+    #     "Mixed (10 agents split across types)": "Mixed"
+    # }
+    # for label, value in ai_algorithm_options.items():
+    #     tk.Radiobutton(root, text=label, variable=ai_algorithm_var, value=value).pack(anchor="w")
 
     # Start Button
     def on_start_button():
+        ai_algorithms = ["KNN","Naive_Bayes","MLPClassifier","Mixed"]
         start_simulation(
             num_agents_var.get(),
             num_treasures_var.get(),
             bomb_ratio_var.get(),
             approach_var.get(),
             consume_all_treasure_var.get(),
-            ai_algorithm_var.get()
+            ai_algorithms
         )
         root.destroy()
 
@@ -153,11 +154,12 @@ def initialize_agents(num_agents, ai_models, agent_positions, consume_all_treasu
     elif ai_models == "Mixed":
         models = [KNeighborsClassifier(), GaussianNB(), MLPClassifier()]
 
+        for model in models:
+            model.fit(training_data, action_labels)
+
         # Round-robin assignment of models to agents
-        agent_models = (models * (num_agents // 3)) + [KNeighborsClassifier()] * (num_agents % 3)
-        agent_models.fit(training_data, action_labels)
         agents = [
-            Agent(f"A{i + 1}", agent_positions[i], consume_all_treasure, ghost_env, agent_models[i],encoder)
+            Agent(f"A{i + 1}", agent_positions[i], consume_all_treasure, ghost_env, models[i % 3], encoder)
             for i in range(num_agents)
         ]
 
@@ -174,13 +176,19 @@ def start_simulation(num_agents, num_treasures, bomb_ratio, approach, consume_al
     ghost_env.initialize_ghost_environment(agent_positions)
     ghost_env.print_ghost_environment()
 
-    # Initialize the agents (agent.py)
-    agents = initialize_agents(num_agents, ai_models, agent_positions, consume_all_treasure, ghost_env,
+    # Initialize the agentss (agent.py)
+    agents_knn = initialize_agents(num_agents, "KNN", agent_positions, consume_all_treasure, ghost_env,
                                training_data, action_labels, encoder)
+    agents_naive_bayes = initialize_agents(num_agents, "Naive_Bayes", agent_positions, consume_all_treasure, ghost_env,
+                                   training_data, action_labels, encoder)
+    agents_mlpclassifier = initialize_agents(num_agents, "MLPClassifier", agent_positions, consume_all_treasure, ghost_env,
+                                           training_data, action_labels, encoder)
+    agents_mixed = initialize_agents(num_agents, "Mixed", agent_positions, consume_all_treasure, ghost_env,
+                                           training_data, action_labels, encoder)
 
-    # Generate the environment
-    env = EnvironmentManager(agent_positions, num_treasures, bomb_ratio, approach, agents)
+    # Generate the environments
+    env = EnvironmentManager(agent_positions, num_treasures, bomb_ratio, approach, agents_knn, ai_models)
     env.generate_grid()
 
     #Displaying the environment
-    env.display(agents)
+    env.display(agents_knn)

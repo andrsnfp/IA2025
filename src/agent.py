@@ -52,6 +52,9 @@ class Agent:
 
         neighboring_cells = self.get_neighboring_cells()
         move = self.predict(neighboring_cells)[0]
+
+        print(f"{self.name} - Current Position: {self.position}")
+        print(f"{self.name} - Neighboring Cells: {neighboring_cells}")
         print(move)
 
         directions = {
@@ -62,6 +65,9 @@ class Agent:
         }
 
         new_position = directions.get(move, self.position)
+
+        if new_position == self.position:
+            print(f"{self.name} - WARNING: Selected move does not change position!")
 
         # Ensure new position is valid and not out of bounds
         if not self.is_within_bounds(new_position, grid):
@@ -82,6 +88,7 @@ class Agent:
                 attempts += 1
 
         print(f"{self.name} moving to {new_position}")
+
         # Interact with the new cell
         x, y = new_position
 

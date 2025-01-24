@@ -8,7 +8,7 @@ class GhostEnvironment:
     def initialize_ghost_environment(self, agent_positions):
         # Initializes the ghost environment with agents placed as 'L'.
         for x, y in agent_positions:
-            self.ghost_env[x][y] = '?'
+            self.ghost_env[x][y] = 'L'
 
     def update_ghost_environment(self, x, y, value):
         # Updates ghost environment at position (x, y) with the given value.

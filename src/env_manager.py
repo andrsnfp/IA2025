@@ -1,9 +1,6 @@
 import random
 import tkinter as tk
-import time
 from cell import Cell
-
-delay = 1.5
 
 class EnvironmentManager:
     def __init__(self, agents_positions, num_treasures, bombs_ratio, approach, agents):
@@ -87,11 +84,25 @@ class EnvironmentManager:
             for widget in env_window.winfo_children():
                 widget.destroy()
             tk.Label(env_window, text="SUCCESS", font=("Arial", 24), fg="green").pack(expand=True)
+            display_stats()
 
         def display_failure():
             for widget in env_window.winfo_children():
                 widget.destroy()
             tk.Label(env_window, text="FAILURE", font=("Arial", 24), fg="red").pack(expand=True)
+            display_stats()
+
+        def display_stats():
+            tk.Label(env_window, text=f"Abordagem: {self.approach}", font=("Arial", 15), fg="black").pack(expand=False)
+            tk.Label(env_window, text=f"Número de Agentes: {len(self.agents)}", font=("Arial", 15), fg="black").pack(expand=False)
+            #tk.Label(env_window, text=f"Algoritmo IA: {self.ai_models}", font=("Arial", 15), fg="black").pack(expand=False)
+            tk.Label(env_window, text=f"Células descobertas: {self.count_discovered_cells() // self.num_free_cells}%", font=("Arial", 15), fg="black").pack(expand=False)
+            tk.Label(env_window, text=f"Tesouros descobertos: {self.count_consumed_treasures() // self.num_treasures}%", font=("Arial", 15), fg="black").pack(expand=False)
+            if self.approach == "C":
+                if self.is_flag_found():
+                    tk.Label(env_window, text=f"Bandeira encontrada.", font=("Arial", 15), fg="black").pack(expand=False)
+                else:
+                    tk.Label(env_window, text=f"Bandeira não foi encontrada.", font=("Arial", 15), fg="black").pack(expand=False)
 
         def update_grid():
             for row in range(self.rows):
@@ -164,7 +175,7 @@ class EnvironmentManager:
 
         row_frame = tk.Frame(controls_frame)
         row_frame.pack(fill="x", pady=5)
-        tk.Button(row_frame, text="Start", command=lambda index=0 : move_agents(index)).pack(side="left")
+        tk.Button(row_frame, text="Start", bg="green", fg="white",command=lambda index=0 : move_agents(index)).pack(side="left")
         #
         # for i, agent in enumerate(agents):
         #     row_frame = tk.Frame(controls_frame)
