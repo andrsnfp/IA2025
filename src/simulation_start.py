@@ -1,5 +1,5 @@
 from sklearn.naive_bayes import GaussianNB
-from sklearn.preprocessing import LabelEncoder
+from sklearn.preprocessing import LabelEncoder, StandardScaler
 from sklearn.model_selection import train_test_split
 
 from sklearn.neighbors import KNeighborsClassifier
@@ -69,7 +69,7 @@ def setup_entry_parameters():
             approach_var.get(),
             consume_all_treasure_var.get(),
         )
-        root.destroy()
+        #root.destroy()
 
     tk.Button(root, text="Criar Ambiente", command=on_start_button, bg="blue", fg="white").pack(pady=20)
 
@@ -78,7 +78,7 @@ def setup_entry_parameters():
 
 def establish_ai_data():
     # Loading the dataset
-    dataset = pd.read_csv('training_data/dataset.csv', delimiter = ',')
+    dataset = pd.read_csv('training_data/data.csv', delimiter = ',')
 
     # Encode categorical features ('L', 'B') into numerical values
     label_encoder = LabelEncoder()
@@ -93,6 +93,8 @@ def establish_ai_data():
     ai_data = x_train, y_train, label_encoder
 
     # classifier = KNeighborsClassifier(n_neighbors=7, p=2, metric='euclidean')
+    # #classifier = GaussianNB(var_smoothing=1e-5)
+    # #classifier = MLPClassifier()
     # classifier.fit(x_train, y_train)
     # y_pred = classifier.predict(x_test)
     #
@@ -122,7 +124,7 @@ def initialize_agents(num_agents, ai_models, agent_positions, consume_all_treasu
         ]
 
     elif ai_models == "Naive_Bayes":
-        ai_model = GaussianNB()
+        ai_model = GaussianNB(var_smoothing=1e-5)
         ai_model.fit(training_data, action_labels)
         print("Agents Trained")
         agents = [
@@ -139,7 +141,7 @@ def initialize_agents(num_agents, ai_models, agent_positions, consume_all_treasu
         ]
 
     elif ai_models == "Mixed":
-        models = [KNeighborsClassifier(), GaussianNB(), MLPClassifier()]
+        models = [KNeighborsClassifier(n_neighbors = 21, p = 2, metric = 'euclidean'), GaussianNB(var_smoothing=1e-5), MLPClassifier()]
 
         for model in models:
             model.fit(training_data, action_labels)
@@ -184,10 +186,10 @@ def start_simulation(num_agents, num_treasures, bomb_ratio, approach, consume_al
     env_mixed = copy.deepcopy(env)
 
     # Giving the copies its agents
-    env_knn.give_agents(agents_knn, 'KNN')
-    env_naive_bayes.give_agents(agents_naive_bayes, 'Naive_Bayes')
-    env_mlpclassifier.give_agents(agents_mlpclassifier, 'MLPClassifier')
-    env_mixed.give_agents(agents_mixed, 'Mixed')
+    env_knn.receive_agents(agents_knn, 'KNN')
+    env_naive_bayes.receive_agents(agents_naive_bayes, 'Naive_Bayes')
+    env_mlpclassifier.receive_agents(agents_mlpclassifier, 'MLPClassifier')
+    env_mixed.receive_agents(agents_mixed, 'Mixed')
 
     # Create a single Tkinter root window
     root = tk.Tk()
@@ -200,10 +202,10 @@ def start_simulation(num_agents, num_treasures, bomb_ratio, approach, consume_al
         env.display(agents, window)  # Pass the window to the display function
 
     # Create all environments as separate windows
-    create_env_window(env_knn, agents_knn, "KNN Environment")
-    create_env_window(env_naive_bayes, agents_naive_bayes, "Naive Bayes Environment")
-    create_env_window(env_mlpclassifier, agents_mlpclassifier, "MLPClassifier Environment")
-    create_env_window(env_mixed, agents_mixed, "Mixed AI Environment")
+    create_env_window(env_knn, agents_knn, "Ambiente KNN")
+    create_env_window(env_naive_bayes, agents_naive_bayes, "Ambiente Naive Bayes")
+    create_env_window(env_mlpclassifier, agents_mlpclassifier, "Ambiente MLPClassifier")
+    create_env_window(env_mixed, agents_mixed, "Ambiente Misto")
 
     #Displaying the environment
     #env.display(agents_knn)

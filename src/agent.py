@@ -2,6 +2,15 @@ import random
 
 class Agent:
     def __init__(self, name, position, consume_all_treasure, ghost_env, ai_model, encoder):
+        """
+                Inicializa um agente no ambiente.
+                :param name: Nome do agente.
+                :param position: Posição inicial do agente (linha, coluna).
+                :param consume_all_treasure: Define se o agente consome todos os tesouros.
+                :param ghost_env: Referência ao ambiente fantasma.
+                :param ai_model: Modelo de IA usado pelo agente.
+                :param encoder: Codificador utilizado para os dados.
+                """
         self.name = name
         self.position = position
         self.previous_positions = [] # Tracks previous positions to prevent loops
@@ -14,6 +23,9 @@ class Agent:
         self.encoder = encoder
 
     def get_neighboring_cells(self):
+        """
+        Retorna os valores das células vizinhas do agente.
+        """
         x, y = self.position
 
         up = self.ghost_env.get_cell_value(x - 1, y) if (x - 1 >= 0) else '-'
@@ -26,14 +38,23 @@ class Agent:
         return neighbors
 
     def is_within_bounds(self, position, grid):
+        """
+        Move o agente manualmente na direção escolhida.
+        """
         x, y = position
         return 0 <= x < len(grid) and 0 <= y < len(grid[0])
 
     def predict(self, data):
+        """
+        Faz uma previsão do próximo movimento com base no modelo de IA.
+        """
         data_to_encode = self.encoder.transform(data)
         return self.ai_model.predict(data_to_encode.reshape(1, -1))
 
     def ai_move(self):
+        """
+        Move o agente usando a previsão do modelo de IA.
+        """
         neighboring_cells = self.get_neighboring_cells()
 
         # Ensure neighboring_cells is a dictionary with correct feature names

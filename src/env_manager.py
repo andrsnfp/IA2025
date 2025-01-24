@@ -15,10 +15,9 @@ class EnvironmentManager:
         self.agents_positions = agents_positions # Position of all agents
         self.grid = self.generate_grid()
 
-    def give_agents(self,agents, model):
+    def receive_agents(self,agents, model):
         self.agents = agents # The Agents running in the environment
         self.model = model
-
 
     def generate_grid(self):
         # Create a list of cell types
@@ -79,9 +78,7 @@ class EnvironmentManager:
         return None
 
     def display(self, agents, env_window):
-        # Tkinter window setup
-        #env_window = tk.Tk()
-        #env_window.title("Ambiente com Agente")
+
         labels = [[None for _ in range(self.cols)] for _ in range(self.rows)]
 
         def display_success():
@@ -97,11 +94,14 @@ class EnvironmentManager:
             display_stats()
 
         def display_stats():
+            discovered_percentage = ( self.count_discovered_cells() / self.num_free_cells) * 100 if self.num_free_cells else 0
+            treasures_percentage = (self.count_consumed_treasures() / self.num_treasures) * 100 if self.num_treasures else 0
+
             tk.Label(env_window, text=f"Abordagem: {self.approach}", font=("Arial", 15), fg="black").pack(expand=False)
             tk.Label(env_window, text=f"Número de Agentes: {len(self.agents)}", font=("Arial", 15), fg="black").pack(expand=False)
             tk.Label(env_window, text=f"Algoritmo IA: {self.model}", font=("Arial", 15), fg="black").pack(expand=False)
-            tk.Label(env_window, text=f"Células descobertas: {self.count_discovered_cells() // self.num_free_cells}%", font=("Arial", 15), fg="black").pack(expand=False)
-            tk.Label(env_window, text=f"Tesouros descobertos: {self.count_consumed_treasures() // self.num_treasures}%", font=("Arial", 15), fg="black").pack(expand=False)
+            tk.Label(env_window, text=f"Células descobertas: {discovered_percentage:.2f}%", font=("Arial", 15), fg="black").pack(expand=False)
+            tk.Label(env_window, text=f"Tesouros descobertos: {treasures_percentage:.2f}%", font=("Arial", 15), fg="black").pack(expand=False)
             if self.approach == "C":
                 if self.is_flag_found():
                     tk.Label(env_window, text=f"Bandeira encontrada.", font=("Arial", 15), fg="black").pack(expand=False)
@@ -122,20 +122,19 @@ class EnvironmentManager:
 
                     labels[row][col].config(bg=color, text=agent_here if agent_here else cell.type) #type: ignore
 
-            # Check success or failure
+        def move_agents(index):
             result = self.verify_success(agents)
             if result == 0:
+                env_window.after(120000, env_window.destroy)  # Stop Tkinter loop
                 display_success()
-                env_window.quit()  # Stop Tkinter loop
                 return
             if result == 1:
+                env_window.after(120000, env_window.destroy)  # Stop Tkinter loop
                 display_failure()
-                env_window.quit()  # Stop Tkinter loop
                 return
 
-        def move_agents(index):
             if index >= len(self.agents):  # Stop if all agents have moved
-                env_window.after(20, move_agents, 0)  # Restart loop
+                env_window.after(20, move_agents, 0)  # Restart loop quickly
                 return
 
             agent = self.agents[index]
@@ -146,7 +145,7 @@ class EnvironmentManager:
                 agent.move(self.grid)  # Move only one agent at a time
 
             update_grid()
-            env_window.after(1000, move_agents, index + 1)  # Call next agent after 1s
+            env_window.after(300, move_agents, index + 1)  # Call next agent after 1s
 
         # GUI setup
         for r in range(self.rows):
