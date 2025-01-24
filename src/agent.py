@@ -43,7 +43,10 @@ class Agent:
         move = self.ai_model.predict(data.reshape(1,-1))[0]
         return move
 
-    def move(self, grid):
+    def move(self, manual_move, grid):
+        if manual_move:
+            return self.manual_move(manual_move,grid)
+
         if len(self.previous_positions) == 2:
             self.previous_positions.pop(0)
         self.previous_positions.append(self.position)
@@ -151,3 +154,33 @@ class Agent:
         print(f"{self.name} reached the flag! Success!")
         cell.found_the_flag()
         self.ghost_env.update_ghost_environment(x, y, 'F')
+
+    def manual_move(self, direction, grid):
+        if not self.alive:
+            print(f"{self.name} is destroyed and cannot move.")
+            return self.position
+
+        rows, cols = len(grid), len(grid[0])
+        x, y = self.position
+
+        # Determine new position based on direction
+        if direction == "up" and x > 0:
+            x -= 1
+        elif direction == "down" and x < rows - 1:
+            x += 1
+        elif direction == "left" and y > 0:
+            y -= 1
+        elif direction == "right" and y < cols - 1:
+            y += 1
+        else:
+            print("Invalid move or out of bounds!")
+            return self.position
+
+        # interact with the cell at the new position
+        self.interact(grid, x, y)
+
+        # Update position
+        self.position = (x, y)
+        self.ghost_env.print_ghost_environment()
+
+        return self.position

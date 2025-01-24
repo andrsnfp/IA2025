@@ -12,6 +12,7 @@ from agent import Agent
 from ghost_environment import GhostEnvironment
 from env_manager import EnvironmentManager
 import random
+import copy
 import tkinter as tk
 import pandas as pd
 
@@ -73,14 +74,12 @@ def setup_entry_parameters():
 
     # Start Button
     def on_start_button():
-        ai_algorithms = ["KNN","Naive_Bayes","MLPClassifier","Mixed"]
         start_simulation(
             num_agents_var.get(),
             num_treasures_var.get(),
             bomb_ratio_var.get(),
             approach_var.get(),
             consume_all_treasure_var.get(),
-            ai_algorithms
         )
         root.destroy()
 
@@ -166,7 +165,7 @@ def initialize_agents(num_agents, ai_models, agent_positions, consume_all_treasu
     return agents
 
 # Function to start the environment creation after collecting parameters
-def start_simulation(num_agents, num_treasures, bomb_ratio, approach, consume_all_treasure, ai_models):
+def start_simulation(num_agents, num_treasures, bomb_ratio, approach, consume_all_treasure):
     # Pre-processing for the agents
     training_data, action_labels, encoder = establish_ai_data()
 
@@ -187,8 +186,38 @@ def start_simulation(num_agents, num_treasures, bomb_ratio, approach, consume_al
                                            training_data, action_labels, encoder)
 
     # Generate the environments
-    env = EnvironmentManager(agent_positions, num_treasures, bomb_ratio, approach, agents_knn, ai_models)
+    env = EnvironmentManager(agent_positions, num_treasures, bomb_ratio, approach)
     env.generate_grid()
 
+    # Creating copies of env
+    env_knn = copy.deepcopy(env)
+    env_naive_bayes = copy.deepcopy(env)
+    env_mlpclassifier = copy.deepcopy(env)
+    env_mixed = copy.deepcopy(env)
+
+    # Giving the copies its agents
+    env_knn.give_agents(agents_knn, 'KNN')
+    env_naive_bayes.give_agents(agents_naive_bayes, 'Naive_Bayes')
+    env_mlpclassifier.give_agents(agents_mlpclassifier, 'MLPClassifier')
+    env_mixed.give_agents(agents_mixed, 'Mixed')
+
+    # Create a single Tkinter root window
+    root = tk.Tk()
+    root.withdraw()  # Hide the main window
+
+    # Function to create multiple environment windows
+    def create_env_window(env, agents, title):
+        window = tk.Toplevel(root)  # Create a new Tkinter window
+        window.title(title)
+        env.display(agents, window)  # Pass the window to the display function
+
+        # Create all environments as separate windows
+    create_env_window(env_knn, agents_knn, "KNN Environment")
+    create_env_window(env_naive_bayes, agents_naive_bayes, "Naive Bayes Environment")
+    create_env_window(env_mlpclassifier, agents_mlpclassifier, "MLPClassifier Environment")
+    create_env_window(env_mixed, agents_mixed, "Mixed AI Environment")
+
     #Displaying the environment
-    env.display(agents_knn)
+    #env.display(agents_knn)
+
+    root.mainloop()

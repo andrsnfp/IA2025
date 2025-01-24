@@ -3,7 +3,7 @@ import tkinter as tk
 from cell import Cell
 
 class EnvironmentManager:
-    def __init__(self, agents_positions, num_treasures, bombs_ratio, approach, agents):
+    def __init__(self, agents_positions, num_treasures, bombs_ratio, approach):
         self.rows = 10
         self.cols = 10
         self.num_treasures = num_treasures
@@ -13,8 +13,12 @@ class EnvironmentManager:
         self.cells_to_discover = self.num_free_cells + self.num_treasures
         self.approach = approach
         self.agents_positions = agents_positions # Position of all agents
-        self.agents = agents # The Agents running in the environment
         self.grid = self.generate_grid()
+
+    def give_agents(self,agents, model):
+        self.agents = agents # The Agents running in the environment
+        self.model = model
+
 
     def generate_grid(self):
         # Create a list of cell types
@@ -74,10 +78,10 @@ class EnvironmentManager:
 
         return None
 
-    def display(self, agents):
+    def display(self, agents, env_window):
         # Tkinter window setup
-        env_window = tk.Tk()
-        env_window.title("Ambiente com Agente")
+        #env_window = tk.Tk()
+        #env_window.title("Ambiente com Agente")
         labels = [[None for _ in range(self.cols)] for _ in range(self.rows)]
 
         def display_success():
@@ -95,7 +99,7 @@ class EnvironmentManager:
         def display_stats():
             tk.Label(env_window, text=f"Abordagem: {self.approach}", font=("Arial", 15), fg="black").pack(expand=False)
             tk.Label(env_window, text=f"Número de Agentes: {len(self.agents)}", font=("Arial", 15), fg="black").pack(expand=False)
-            #tk.Label(env_window, text=f"Algoritmo IA: {self.ai_models}", font=("Arial", 15), fg="black").pack(expand=False)
+            tk.Label(env_window, text=f"Algoritmo IA: {self.model}", font=("Arial", 15), fg="black").pack(expand=False)
             tk.Label(env_window, text=f"Células descobertas: {self.count_discovered_cells() // self.num_free_cells}%", font=("Arial", 15), fg="black").pack(expand=False)
             tk.Label(env_window, text=f"Tesouros descobertos: {self.count_consumed_treasures() // self.num_treasures}%", font=("Arial", 15), fg="black").pack(expand=False)
             if self.approach == "C":
@@ -129,25 +133,9 @@ class EnvironmentManager:
                 env_window.quit()  # Stop Tkinter loop
                 return
 
-        # def move_agent():
-        #     for agent in self.agents:
-        #         if not agent.alive:
-        #             print(f"{agent.name} is destroyed in {agent.position} and cannot move.")
-        #             continue
-        #
-        #         # AI determines and executes the move
-        #         # time.sleep(delay)
-        #         new_position = agent.move(self.grid)
-        #
-        #         # If an agent's move doesn't change the environment, avoid an infinite loop
-        #         if new_position == agent.position:
-        #             print(f"{agent.name} did not move.")
-        #
-        #         # update_grid()
-
         def move_agents(index):
             if index >= len(self.agents):  # Stop if all agents have moved
-                env_window.after(100, move_agents, 0)  # Restart loop after 1.5s
+                env_window.after(20, move_agents, 0)  # Restart loop
                 return
 
             agent = self.agents[index]
@@ -158,7 +146,7 @@ class EnvironmentManager:
                 agent.move(self.grid)  # Move only one agent at a time
 
             update_grid()
-            env_window.after(1000, move_agents, index + 1)  # Call next agent after 1.2s
+            env_window.after(1000, move_agents, index + 1)  # Call next agent after 1s
 
         # GUI setup
         for r in range(self.rows):
@@ -173,10 +161,11 @@ class EnvironmentManager:
         controls_frame = tk.Frame(env_window)
         controls_frame.grid(row=self.rows, column=0, columnspan=self.cols, pady=5)
 
+        # Frame for the start button
         row_frame = tk.Frame(controls_frame)
         row_frame.pack(fill="x", pady=5)
         tk.Button(row_frame, text="Start", bg="green", fg="white",command=lambda index=0 : move_agents(index)).pack(side="left")
-        #
+
         # for i, agent in enumerate(agents):
         #     row_frame = tk.Frame(controls_frame)
         #     row_frame.pack(fill="x", pady=5)
@@ -187,4 +176,4 @@ class EnvironmentManager:
         #     tk.Button(row_frame, text="➡", command=lambda a=agent: move_agent(a, "right")).pack(side="left")
 
         update_grid()
-        env_window.mainloop()
+        #env_window.mainloop()
