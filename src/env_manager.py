@@ -86,8 +86,8 @@ class EnvironmentManager:
         """Saves each environment's data separately."""
         dados_simulacao = {
             "Algoritmo IA": env_name,
-            "Células Descobertas (%)": self.count_discovered_cells() // self.num_free_cells * 100 if self.num_free_cells else 0,
-            "Tesouros Descobertos (%)": self.count_consumed_treasures() // self.num_treasures * 100 if self.num_free_cells else 0,
+            "Células Descobertas (%)": (self.count_discovered_cells() / self.num_free_cells) * 100 if self.num_free_cells else 0,
+            "Tesouros Descobertos (%)": (self.count_consumed_treasures() / self.num_treasures) * 100 if self.num_free_cells else 0,
             "Agentes Sobreviventes": sum(1 for agent in self.agents if agent.alive),
             "Movimentos Totais": self.total_movements,
             "Tempo Restante (s)": self.time_remaining if isinstance(self.time_remaining, int) else 0,
