@@ -22,6 +22,10 @@ class Agent:
         self.ai_model = ai_model
         self.encoder = encoder
 
+        # New tracker: { (x, y) : visit_count }
+        self.cell_tracker = {}
+        self.bomb_override = {}  # Stores fake bombs: { (x, y): turns_remaining }
+
     def get_neighboring_cells(self):
         """
         Retorna os valores das células vizinhas do agente.
@@ -72,8 +76,37 @@ class Agent:
             print(f"{self.name} não tem movimentos válidos e permanecerá na posição.")
             return self.position  # No valid moves, stay in place
 
+        # Update visit count for the current position
+        self.cell_tracker[self.position] = self.cell_tracker.get(self.position, 0) + 1
+
+        # If visited 3 times, turn this cell into a "fake bomb" for 10 turns
+        if self.cell_tracker[self.position] >= 3 and self.position not in self.bomb_override:
+            self.bomb_override[self.position] = 10  # Fake bomb lasts 10 turns
+
+        # Decrease bomb override timer
+        for pos in list(self.bomb_override.keys()):
+            self.bomb_override[pos] -= 1
+            if self.bomb_override[pos] <= 0:
+                del self.bomb_override[pos]  # Remove expired fake bomb
+
+        # Define standard directions in a fixed order
+        directions = ["left", "right", "up", "down"]
+
+        # Map directions to their respective indices in the list
+        direction_map = {"left": 0, "right": 1, "up": 2, "down": 3}
+
         # Prepare AI input: Encode neighboring cells
-        neighboring_cells = self.get_neighboring_cells()
+        neighboring_cells = ["-" for _ in range(4)]
+
+        # Ensure exactly 4 values in neighboring_cells
+        for move, (new_x, new_y) in valid_moves.items():
+            if move in direction_map:  # Ensure we're only adding known directions
+                index = direction_map[move]
+                cell_type = grid[new_x][new_y].type
+                if (new_x, new_y) in self.bomb_override:
+                    cell_type = "B"  # Override with a bomb if needed
+                neighboring_cells[index] = cell_type  # Assign to correct position
+
         encoded_data = self.encoder.transform(neighboring_cells).reshape(1, -1)
 
         # Predict the move using AI

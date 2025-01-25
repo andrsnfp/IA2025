@@ -125,11 +125,11 @@ class EnvironmentManager:
         def move_agents(index):
             result = self.verify_success(agents)
             if result == 0:
-                env_window.after(120000, env_window.destroy)  # Stop Tkinter loop
+                env_window.after(130000, env_window.destroy)  # Stop Tkinter loop
                 display_success()
                 return
             if result == 1:
-                env_window.after(120000, env_window.destroy)  # Stop Tkinter loop
+                env_window.after(130000, env_window.destroy)  # Stop Tkinter loop
                 display_failure()
                 return
 
@@ -145,7 +145,7 @@ class EnvironmentManager:
                 agent.move(self.grid)  # Move only one agent at a time
 
             update_grid()
-            env_window.after(300, move_agents, index + 1)  # Call next agent after 1s
+            env_window.after(270, move_agents, index + 1)  # Call next agent after 1s
 
         # GUI setup
         for r in range(self.rows):
