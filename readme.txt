@@ -2,6 +2,7 @@
 numpy
 pandas
 matplotlib
+scikit-learn
 all existing in "dependencies.txt"
 
 to install them all at once, open terminal and run:
