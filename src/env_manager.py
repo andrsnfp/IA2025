@@ -187,6 +187,8 @@ class EnvironmentManager:
             
             update_timer()
 
+        def stop_countdown():
+            self.time_remaining = 0
 
         # GUI setup
         for r in range(self.rows):
@@ -205,6 +207,7 @@ class EnvironmentManager:
         row_frame = tk.Frame(controls_frame)
         row_frame.pack(fill="x", pady=5)
         tk.Button(row_frame, text="Start", bg="green", fg="white",command=lambda: [move_agents(0), start_countdown()]).pack(side="left")
+        tk.Button(row_frame, text="Stop", bg="red", fg="white",command=stop_countdown).pack(side="left")
 
         # for i, agent in enumerate(agents):
         #     row_frame = tk.Frame(controls_frame)
