@@ -3,7 +3,7 @@ import tkinter as tk
 from cell import Cell
 
 class EnvironmentManager:
-    def __init__(self, agents_positions, num_treasures, bombs_ratio, approach):
+    def __init__(self, agents_positions, num_treasures, bombs_ratio, approach, time):
         self.rows = 10
         self.cols = 10
         self.num_treasures = num_treasures
@@ -14,6 +14,9 @@ class EnvironmentManager:
         self.approach = approach
         self.agents_positions = agents_positions # Position of all agents
         self.grid = self.generate_grid()
+
+        self.countdown_timer = True
+        self.time_remaining = time
 
     def receive_agents(self,agents, model):
         self.agents = agents # The Agents running in the environment
@@ -81,6 +84,10 @@ class EnvironmentManager:
 
         labels = [[None for _ in range(self.cols)] for _ in range(self.rows)]
 
+        # Timer label (added to GUI)
+        self.timer_label = tk.Label(env_window, text="", font=("Arial", 14), fg="red")
+        self.timer_label.grid(row=self.rows + 1, column=0, columnspan=self.cols, pady=5)
+
         def display_success():
             for widget in env_window.winfo_children():
                 widget.destroy()
@@ -107,6 +114,8 @@ class EnvironmentManager:
                     tk.Label(env_window, text=f"Bandeira encontrada.", font=("Arial", 15), fg="black").pack(expand=False)
                 else:
                     tk.Label(env_window, text=f"Bandeira não foi encontrada.", font=("Arial", 15), fg="black").pack(expand=False)
+            if self.countdown_timer == False:
+                tk.Label(env_window, text="O tempo acabou.", font=("Arial", 15), fg="black").pack(expand=False)
 
         def update_grid():
             for row in range(self.rows):
@@ -124,6 +133,13 @@ class EnvironmentManager:
 
         def move_agents(index):
             result = self.verify_success(agents)
+
+            # Check if time is up
+            if self.countdown_timer == False:
+                print("O tempo acabou! Terminando a simulação.")
+                display_failure()
+                return  # Stop movement
+
             if result == 0:
                 env_window.after(130000, env_window.destroy)  # Stop Tkinter loop
                 display_success()
@@ -145,7 +161,7 @@ class EnvironmentManager:
                 agent.move(self.grid)  # Move only one agent at a time
 
             update_grid()
-            env_window.after(1000, move_agents, index + 1)  # Call next agent after 1s
+            env_window.after(500, move_agents, index + 1)  # VELOCIDADE DA SIMULACAO
 
             def move_agent(agent, direction):
                 if not agent.alive:
@@ -153,6 +169,24 @@ class EnvironmentManager:
                     return
                 agent.manual_move(direction, self.grid)
                 update_grid()
+
+        def start_countdown():
+            """Start a countdown timer and trigger failure if time runs out."""
+
+            def update_timer():
+                minutes = self.time_remaining // 60
+                seconds = self.time_remaining % 60
+                self.timer_label.config(text=f"Tempo restante: {minutes}:{seconds:02d}")  # Format MM:SS
+
+                if self.time_remaining > 0:
+                    self.time_remaining -= 1
+                    env_window.after(1000, update_timer)  # Update every second
+                else:
+                    self.countdown_timer = False  # Timer is up
+                    return
+            
+            update_timer()
+
 
         # GUI setup
         for r in range(self.rows):
@@ -170,7 +204,7 @@ class EnvironmentManager:
         # Frame for the start button
         row_frame = tk.Frame(controls_frame)
         row_frame.pack(fill="x", pady=5)
-        tk.Button(row_frame, text="Start", bg="green", fg="white",command=lambda index=0 : move_agents(index)).pack(side="left")
+        tk.Button(row_frame, text="Start", bg="green", fg="white",command=lambda: [move_agents(0), start_countdown()]).pack(side="left")
 
         # for i, agent in enumerate(agents):
         #     row_frame = tk.Frame(controls_frame)

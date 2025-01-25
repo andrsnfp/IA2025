@@ -54,6 +54,11 @@ def setup_entry_parameters():
     for label, value in approach_options.items():
         tk.Radiobutton(root, text=label, variable=approach_var, value=value).pack(anchor="w")
 
+    # Time Selection
+    tk.Label(root, text="Seleccionar o tempo da simulação (s):", font=("Arial", 12)).pack(pady=10)
+    time_var = tk.IntVar(value=60)  # Default value
+    tk.Scale(root, from_=30, to=300, orient=tk.HORIZONTAL, variable=time_var).pack()
+
     # Consume All Treasure Selection
     tk.Label(root, text="Um agente consome todo o tesouro?", font=("Arial", 12)).pack(pady=10)
     consume_all_treasure_var = tk.BooleanVar(value=False)  # Default is True
@@ -68,6 +73,7 @@ def setup_entry_parameters():
             bomb_ratio_var.get(),
             approach_var.get(),
             consume_all_treasure_var.get(),
+            time_var.get(),
         )
         #root.destroy()
 
@@ -91,14 +97,14 @@ def establish_ai_data():
     x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.2, random_state = 42)
 
     ai_data = x_train, y_train, label_encoder
-
     # classifier = KNeighborsClassifier(n_neighbors=7, p=2, metric='euclidean')
-    # #classifier = GaussianNB(var_smoothing=1e-5)
-    # #classifier = MLPClassifier()
+    # # #classifier = GaussianNB(var_smoothing=1e-5)
+    # # #classifier = MLPClassifier()
+    #
     # classifier.fit(x_train, y_train)
     # y_pred = classifier.predict(x_test)
-    #
-    # # Evaluate the model
+    # #
+    # # # Evaluate the model
     # cm = confusion_matrix(y_test, y_pred)
     # print("Confusion Matrix:\n", cm)
     #
@@ -107,7 +113,7 @@ def establish_ai_data():
     #
     # accuracy = accuracy_score(y_test, y_pred)
     # print("Accuracy:", accuracy)
-
+    #
     return ai_data
 
 # Function to initialize agents based on AI model
@@ -155,7 +161,7 @@ def initialize_agents(num_agents, ai_models, agent_positions, consume_all_treasu
     return agents
 
 # Function to start the environment creation after collecting parameters
-def start_simulation(num_agents, num_treasures, bomb_ratio, approach, consume_all_treasure):
+def start_simulation(num_agents, num_treasures, bomb_ratio, approach, consume_all_treasure, time):
     # Pre-processing for the agents
     training_data, action_labels, encoder = establish_ai_data()
 
@@ -176,7 +182,7 @@ def start_simulation(num_agents, num_treasures, bomb_ratio, approach, consume_al
                                            training_data, action_labels, encoder)
 
     # Generate the environments
-    env = EnvironmentManager(agent_positions, num_treasures, bomb_ratio, approach)
+    env = EnvironmentManager(agent_positions, num_treasures, bomb_ratio, approach, time)
     env.generate_grid()
 
     # Creating copies of env

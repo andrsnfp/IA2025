@@ -4,8 +4,10 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ce8dbe8c-8190-4f0a-8a99-14021771fc7d" name="Changes" comment="22. Added comments for documentation. Fixed some bugs. &#10;Improved the code here and there.&#10;&#10;Need to revise the AI part. Maybe change the amount of training data">
+    <list default="true" id="ce8dbe8c-8190-4f0a-8a99-14021771fc7d" name="Changes" comment="">
       <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/agent.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/agent.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/src/env_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/env_manager.py" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/simulation_start.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/simulation_start.py" afterDir="false" />
     </list>
     <list id="6cd9376c-7cb2-4b76-b962-f43c5b9c6df4" name="Changes by Alberto Mateus" comment="" />
@@ -51,31 +53,32 @@
     <option name="hideEmptyMiddlePackages" value="true" />
     <option name="showLibraryContents" value="true" />
   </component>
-  <component name="PropertiesComponent"><![CDATA[{
-  "keyToString": {
-    "ASKED_SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "Python.Environment.executor": "Run",
-    "Python.agent.executor": "Run",
-    "Python.dataset.executor": "Run",
-    "Python.entry_parameters.executor": "Run",
-    "Python.environment.executor": "Run",
-    "Python.knn.executor": "Run",
-    "Python.knn_agent.executor": "Run",
-    "Python.main.executor": "Run",
-    "Python.sim_start.executor": "Run",
-    "RunOnceActivity.ShowReadmeOnStart": "true",
-    "SHARE_PROJECT_CONFIGURATION_FILES": "true",
-    "git-widget-placeholder": "master",
-    "ignore.virus.scanning.warn.message": "true",
-    "node.js.detected.package.eslint": "true",
-    "node.js.detected.package.tslint": "true",
-    "node.js.selected.package.eslint": "(autodetect)",
-    "node.js.selected.package.tslint": "(autodetect)",
-    "nodejs_package_manager_path": "npm",
-    "settings.editor.selected.configurable": "preferences.lookFeel",
-    "vue.rearranger.settings.migration": "true"
+  <component name="PropertiesComponent">{
+  &quot;keyToString&quot;: {
+    &quot;ASKED_SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;Python.Environment.executor&quot;: &quot;Run&quot;,
+    &quot;Python.agent.executor&quot;: &quot;Run&quot;,
+    &quot;Python.dataset.executor&quot;: &quot;Run&quot;,
+    &quot;Python.dataset_test.executor&quot;: &quot;Run&quot;,
+    &quot;Python.entry_parameters.executor&quot;: &quot;Run&quot;,
+    &quot;Python.environment.executor&quot;: &quot;Run&quot;,
+    &quot;Python.knn.executor&quot;: &quot;Run&quot;,
+    &quot;Python.knn_agent.executor&quot;: &quot;Run&quot;,
+    &quot;Python.main.executor&quot;: &quot;Run&quot;,
+    &quot;Python.sim_start.executor&quot;: &quot;Run&quot;,
+    &quot;RunOnceActivity.ShowReadmeOnStart&quot;: &quot;true&quot;,
+    &quot;SHARE_PROJECT_CONFIGURATION_FILES&quot;: &quot;true&quot;,
+    &quot;git-widget-placeholder&quot;: &quot;master&quot;,
+    &quot;ignore.virus.scanning.warn.message&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.eslint&quot;: &quot;true&quot;,
+    &quot;node.js.detected.package.tslint&quot;: &quot;true&quot;,
+    &quot;node.js.selected.package.eslint&quot;: &quot;(autodetect)&quot;,
+    &quot;node.js.selected.package.tslint&quot;: &quot;(autodetect)&quot;,
+    &quot;nodejs_package_manager_path&quot;: &quot;npm&quot;,
+    &quot;settings.editor.selected.configurable&quot;: &quot;preferences.lookFeel&quot;,
+    &quot;vue.rearranger.settings.migration&quot;: &quot;true&quot;
   }
-}]]></component>
+}</component>
   <component name="RecentsManager">
     <key name="MoveFile.RECENT_KEYS">
       <recent name="C:\Users\hp\PycharmProjects\IA2025\src\ai stuff" />
@@ -97,6 +100,29 @@
       <option name="ADD_SOURCE_ROOTS" value="true" />
       <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
       <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/training_data/dataset.py" />
+      <option name="PARAMETERS" value="" />
+      <option name="SHOW_COMMAND_LINE" value="false" />
+      <option name="EMULATE_TERMINAL" value="false" />
+      <option name="MODULE_MODE" value="false" />
+      <option name="REDIRECT_INPUT" value="false" />
+      <option name="INPUT_FILE" value="" />
+      <method v="2" />
+    </configuration>
+    <configuration name="dataset_test" type="PythonConfigurationType" factoryName="Python" temporary="true" nameIsGenerated="true">
+      <module name="IA2025" />
+      <option name="ENV_FILES" value="" />
+      <option name="INTERPRETER_OPTIONS" value="" />
+      <option name="PARENT_ENVS" value="true" />
+      <envs>
+        <env name="PYTHONUNBUFFERED" value="1" />
+      </envs>
+      <option name="SDK_HOME" value="" />
+      <option name="WORKING_DIRECTORY" value="$PROJECT_DIR$/src/training_data" />
+      <option name="IS_MODULE_SDK" value="true" />
+      <option name="ADD_CONTENT_ROOTS" value="true" />
+      <option name="ADD_SOURCE_ROOTS" value="true" />
+      <EXTENSION ID="PythonCoverageRunConfigurationExtension" runner="coverage.py" />
+      <option name="SCRIPT_NAME" value="$PROJECT_DIR$/src/training_data/dataset_test.py" />
       <option name="PARAMETERS" value="" />
       <option name="SHOW_COMMAND_LINE" value="false" />
       <option name="EMULATE_TERMINAL" value="false" />
@@ -154,6 +180,7 @@
     <recent_temporary>
       <list>
         <item itemvalue="Python.main" />
+        <item itemvalue="Python.dataset_test" />
         <item itemvalue="Python.sim_start" />
         <item itemvalue="Python.dataset" />
       </list>
@@ -187,7 +214,9 @@
       <workItem from="1737477119047" duration="5841000" />
       <workItem from="1737571624542" duration="9247000" />
       <workItem from="1737581079300" duration="1311000" />
-      <workItem from="1737720011451" duration="20154000" />
+      <workItem from="1737720011451" duration="31342000" />
+      <workItem from="1737824364528" duration="559000" />
+      <workItem from="1737828646954" duration="5680000" />
     </task>
     <task id="LOCAL-00001" summary="Primeiro commit. Criação do Ambiente.&#10;Ambiente é gerado com a opção de perguntar o ratio de bombas antes da geração.">
       <option name="closed" value="true" />
@@ -429,7 +458,55 @@
       <option name="project" value="LOCAL" />
       <updated>1737742107789</updated>
     </task>
-    <option name="localTasksCounter" value="31" />
+    <task id="LOCAL-00031" summary="23. Code is ready to be sent. But will still test the new dataset_test.py that contains a has_power column.">
+      <option name="closed" value="true" />
+      <created>1737816247979</created>
+      <option name="number" value="00031" />
+      <option name="presentableId" value="LOCAL-00031" />
+      <option name="project" value="LOCAL" />
+      <updated>1737816247979</updated>
+    </task>
+    <task id="LOCAL-00032" summary="23.1 Some cleanup">
+      <option name="closed" value="true" />
+      <created>1737818465870</created>
+      <option name="number" value="00032" />
+      <option name="presentableId" value="LOCAL-00032" />
+      <option name="project" value="LOCAL" />
+      <updated>1737818465870</updated>
+    </task>
+    <task id="LOCAL-00033" summary="23.2 Corrections to readme.txt and dependencies.txt">
+      <option name="closed" value="true" />
+      <created>1737819579424</created>
+      <option name="number" value="00033" />
+      <option name="presentableId" value="LOCAL-00033" />
+      <option name="project" value="LOCAL" />
+      <updated>1737819579424</updated>
+    </task>
+    <task id="LOCAL-00034" summary="24. Severely improved ai and movement. Agents now are very smart">
+      <option name="closed" value="true" />
+      <created>1737821132238</created>
+      <option name="number" value="00034" />
+      <option name="presentableId" value="LOCAL-00034" />
+      <option name="project" value="LOCAL" />
+      <updated>1737821132238</updated>
+    </task>
+    <task id="LOCAL-00035" summary="24.1 Some log translation and corrected the cheating error. Where the agents could see the environment in the agent.move() function">
+      <option name="closed" value="true" />
+      <created>1737823241857</created>
+      <option name="number" value="00035" />
+      <option name="presentableId" value="LOCAL-00035" />
+      <option name="project" value="LOCAL" />
+      <updated>1737823241857</updated>
+    </task>
+    <task id="LOCAL-00036" summary="24.2 Added back manual move function into env_manager. For testing purposes">
+      <option name="closed" value="true" />
+      <created>1737823954222</created>
+      <option name="number" value="00036" />
+      <option name="presentableId" value="LOCAL-00036" />
+      <option name="project" value="LOCAL" />
+      <updated>1737823954222</updated>
+    </task>
+    <option name="localTasksCounter" value="37" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -447,13 +524,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="05. Agent has now the ability to obtain a treasure and become empowered by it. Allowing it to survive and deactivate a bomb" />
-    <MESSAGE value="06. Added the ability to have multiple agents in one environment." />
-    <MESSAGE value="07. Introduced main method as the entry point of the program.&#10;environment.py only has the environment functions." />
-    <MESSAGE value="08. Added the parameter &quot;Consume All&quot;. Meaning the user can choose whether:&#10;1. One treasure works for all agents but one bomb kills several agents&#10;2. One treasure is for one agent only but one bomb can only kill one agent." />
-    <MESSAGE value="09. Made sure no agents can use the exploit of using a known treasure for unlimited empowerment." />
-    <MESSAGE value="10. Created the basys for cooperation. Each agent has access to a database of the moves and knowledge obtained by all the agents in the environment." />
-    <MESSAGE value="10.1 Made the agent disappear when he dies." />
     <MESSAGE value="12. Changed the way the environment is generated. Now it receives an entry parameter of the number of treasures. And from there, finds the number of bombs and free cells according to its ratios." />
     <MESSAGE value="14. Made agents spawn randomly in the environment. And separated interaction logic." />
     <MESSAGE value="14.1 Created Class GhostEnvironment to replace the current ghost environment. Not finished" />
@@ -472,14 +542,22 @@
     <MESSAGE value="21. Finally, multiple windows are working.&#10;&#10;Need to revise the AI part. Maybe change the amount of training data" />
     <MESSAGE value="21.1. Correction of small errors &#10;&#10;Need to revise the AI part. Maybe change the amount of training data" />
     <MESSAGE value="22. Added comments for documentation. Fixed some bugs. &#10;Improved the code here and there.&#10;&#10;Need to revise the AI part. Maybe change the amount of training data" />
-    <option name="LAST_COMMIT_MESSAGE" value="22. Added comments for documentation. Fixed some bugs. &#10;Improved the code here and there.&#10;&#10;Need to revise the AI part. Maybe change the amount of training data" />
+    <MESSAGE value="23. Code is ready to be sent. But will still test the new dataset_test.py that contains a has_power column." />
+    <MESSAGE value="23.1 Some cleanup" />
+    <MESSAGE value="23.2 Corrections to readme.txt and dependencies.txt" />
+    <MESSAGE value="24. Severely improved ai and movement. Agents now are very smart" />
+    <MESSAGE value="24.2 Added back manual movement function call in env_manager. For testing" />
+    <MESSAGE value="24.1 Some log translation and corrected the cheating error. Where the agents could see the environment in the agent.move() function" />
+    <MESSAGE value="24.2 Added back manual move function into env_manager. For testing purposes" />
+    <option name="LAST_COMMIT_MESSAGE" value="24.2 Added back manual move function into env_manager. For testing purposes" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
-    <SUITE FILE_PATH="coverage/IA2025$main.coverage" NAME="main Coverage Results" MODIFIED="1737742153681" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
+    <SUITE FILE_PATH="coverage/IA2025$main.coverage" NAME="main Coverage Results" MODIFIED="1737834368371" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/IA2025$environment.coverage" NAME="environment Coverage Results" MODIFIED="1736783737508" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/IA2025$entry_parameters.coverage" NAME="entry_parameters Coverage Results" MODIFIED="1736940572510" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/IA2025$agent.coverage" NAME="agent Coverage Results" MODIFIED="1736631951982" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/IA2025$dataset.coverage" NAME="dataset Coverage Results" MODIFIED="1737313341356" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/training_data" />
+    <SUITE FILE_PATH="coverage/IA2025$dataset_test.coverage" NAME="dataset_test Coverage Results" MODIFIED="1737817515961" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/training_data" />
     <SUITE FILE_PATH="coverage/IA2025$Environment.coverage" NAME="Environment Coverage Results" MODIFIED="1736417129954" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/IA2025$sim_start.coverage" NAME="sim_start Coverage Results" MODIFIED="1737720605174" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />
     <SUITE FILE_PATH="coverage/IA2025$knn_agent.coverage" NAME="knn_agent Coverage Results" MODIFIED="1737138437840" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src/ai stuff" />

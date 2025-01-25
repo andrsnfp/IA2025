@@ -72,6 +72,7 @@ class Agent:
     def move(self, grid):
         """Movimenta o agente com base na IA, garantindo que a posição seja atualizada corretamente."""
         valid_moves = self.get_valid_moves()  # Get valid moves
+
         if not valid_moves:
             print(f"{self.name} não tem movimentos válidos e permanecerá na posição.")
             return self.position  # No valid moves, stay in place
