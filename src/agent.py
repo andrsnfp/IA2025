@@ -37,12 +37,12 @@ class Agent:
         print(neighbors)
         return neighbors
 
-    def is_within_bounds(self, position, grid):
+    def is_within_bounds(self, position):
         """
         Move o agente manualmente na direção escolhida.
         """
         x, y = position
-        return 0 <= x < len(grid) and 0 <= y < len(grid[0])
+        return 0 <= x < 10 and 0 <= y < 10
 
     def predict(self, data):
         """
@@ -64,68 +64,131 @@ class Agent:
         move = self.ai_model.predict(data.reshape(1,-1))[0]
         return move
 
-    def move(self, grid):
-        # if manual_move:
-        #     return self.manual_move(manual_move,grid)
-
-        if len(self.previous_positions) == 2:
-            self.previous_positions.pop(0)
-        self.previous_positions.append(self.position)
-
+    def get_valid_moves(self):
+        """Retorna os movimentos válidos que o agente pode fazer, evitando bordas e backtracking."""
         x, y = self.position
 
-        neighboring_cells = self.get_neighboring_cells()
-        move = self.predict(neighboring_cells)[0]
-
-        print(f"{self.name} - Current Position: {self.position}")
-        print(f"{self.name} - Neighboring Cells: {neighboring_cells}")
-        print(move)
-
-        directions = {
+        possible_moves = {
             "up": (x - 1, y),
             "down": (x + 1, y),
             "left": (x, y - 1),
             "right": (x, y + 1)
         }
 
-        new_position = directions.get(move, self.position)
+        valid_moves = {}
 
-        if new_position == self.position:
-            print(f"{self.name} - WARNING: Selected move does not change position!")
+        for direction, (new_x, new_y) in possible_moves.items():
+            # Check if move is within bounds
+            if 0 <= new_x < 10 and 0 <= new_y < 10:
+                if len(self.previous_positions) < 2 or (new_x, new_y) != self.previous_positions[-1]:
+                    valid_moves[direction] = (new_x, new_y)  # Prevents back-and-forth movement
 
-        # Ensure new position is valid and not out of bounds
-        if not self.is_within_bounds(new_position, grid):
-            print(f"{self.name}: Move '{move}' is out of bounds. Skipping move.")
-            return self.position
+        return valid_moves
 
-        if len(self.previous_positions) == 2:
-            attempts = 0
-            while new_position == self.previous_positions[0] and attempts < 5:
-                possible_moves = [value for value in neighboring_cells if value != '-']
+    def move(self, grid):
+        """Movimenta o agente com base na IA, garantindo que a posição seja atualizada corretamente."""
 
-                if not possible_moves:
-                    print(f"{self.name}: No valid moves left. Staying in place.")
-                    return self.position  # Stay in place if no valid moves
+        if not self.alive:
+            print(f"{self.name} está destruído e não pode se mover.")
+            return self.position  # Prevent movement if the agent is dead
 
-                new_move = random.choice(possible_moves)
-                new_position = directions.get(new_move, self.position)
-                attempts += 1
+        valid_moves = self.get_valid_moves()  # Get valid moves
+        if not valid_moves:
+            print(f"{self.name} não tem movimentos válidos e permanecerá na posição.")
+            return self.position  # No valid moves, stay in place
 
-        print(f"{self.name} moving to {new_position}")
+        # Prepare AI input: Encode neighboring cells
+        neighboring_cells = self.get_neighboring_cells()
+        encoded_data = self.encoder.transform(neighboring_cells).reshape(1, -1)
 
-        # Interact with the new cell
+        # Predict the move using AI
+        predicted_direction = self.ai_model.predict(encoded_data)[0]
+        print(f"Predicted move: {predicted_direction}")
+
+        # Ensure the predicted move is valid
+        if predicted_direction not in valid_moves:
+            print(f"{self.name} tentou um movimento inválido '{predicted_direction}', escolhendo outro aleatoriamente.")
+            predicted_direction = random.choice(list(valid_moves.keys()))  # Choose a valid move randomly
+
+        new_position = valid_moves[predicted_direction]
+
+        # Interaction with the grid
         x, y = new_position
+        self.interact(grid, x, y)  # Handle interaction with new cell
 
-        try:
-            self.interact(grid, x, y)
-        except Exception as e:
-            print(f"failed to interact with {self.name}: {e}")
-            return self.position #Prevents breaking the loop
+        # Update agent position
+        self.previous_positions.append(self.position)  # Store the last position
+        if len(self.previous_positions) > 2:  # Keep history manageable
+            self.previous_positions.pop(0)
 
-        # Update position
-        self.position = new_position
-        self.ghost_env.print_ghost_environment()
+        self.position = new_position  # Move agent to new position
+        self.ghost_env.print_ghost_environment()  # Update ghost environment
+
+        print(f"{self.name} moveu-se para {self.position}")
         return self.position
+
+    # def move(self, grid):
+    #     # if manual_move:
+    #     #     return self.manual_move(manual_move,grid)
+    #
+    #     if len(self.previous_positions) == 2:
+    #         self.previous_positions.pop(0)
+    #     self.previous_positions.append(self.position)
+    #
+    #     x, y = self.position
+    #
+    #     neighboring_cells = self.get_neighboring_cells()
+    #     move = self.predict(neighboring_cells)[0]
+    #
+    #     print(f"{self.name} - Current Position: {self.position}")
+    #     print(f"{self.name} - Neighboring Cells: {neighboring_cells}")
+    #     print(move)
+    #
+    #     directions = {
+    #         "up": (x - 1, y),
+    #         "down": (x + 1, y),
+    #         "left": (x, y - 1),
+    #         "right": (x, y + 1)
+    #     }
+    #
+    #     new_position = directions.get(move, self.position)
+    #
+    #     if new_position == self.position:
+    #         print(f"{self.name} - WARNING: Selected move does not change position!")
+    #
+    #     # Ensure new position is valid and not out of bounds
+    #     if not self.is_within_bounds(new_position):
+    #         print(f"{self.name}: Move '{move}' is out of bounds. Skipping move.")
+    #         return self.position
+    #
+    #     if len(self.previous_positions) == 2:
+    #         attempts = 0
+    #         while new_position == self.previous_positions[0] and attempts < 5:
+    #             possible_moves = [value for value in neighboring_cells if value != '-']
+    #
+    #             if not possible_moves:
+    #                 print(f"{self.name}: No valid moves left. Staying in place.")
+    #                 return self.position  # Stay in place if no valid moves
+    #
+    #             new_move = random.choice(possible_moves)
+    #             new_position = directions.get(new_move, self.position)
+    #             attempts += 1
+    #
+    #     print(f"{self.name} moving to {new_position}")
+    #
+    #     # Interact with the new cell
+    #     x, y = new_position
+    #
+    #     try:
+    #         self.interact(grid, x, y)
+    #     except Exception as e:
+    #         print(f"failed to interact with {self.name}: {e}")
+    #         return self.position #Prevents breaking the loop
+    #
+    #     # Update position
+    #     self.position = new_position
+    #     self.ghost_env.print_ghost_environment()
+    #     return self.position
 
     def interact(self, grid, x, y):
         cell = grid[x][y]

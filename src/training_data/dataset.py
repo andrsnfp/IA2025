@@ -51,5 +51,5 @@ def generate_dataset(output_file):
 
 # Main function
 if __name__ == "__main__":
-    output_file = "dataset.csv"
+    output_file = "dataset_test.csv"
     generate_dataset(output_file)
