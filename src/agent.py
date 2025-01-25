@@ -37,32 +37,12 @@ class Agent:
         print(neighbors)
         return neighbors
 
-    def is_within_bounds(self, position):
-        """
-        Move o agente manualmente na direção escolhida.
-        """
-        x, y = position
-        return 0 <= x < 10 and 0 <= y < 10
-
     def predict(self, data):
         """
         Faz uma previsão do próximo movimento com base no modelo de IA.
         """
         data_to_encode = self.encoder.transform(data)
         return self.ai_model.predict(data_to_encode.reshape(1, -1))
-
-    def ai_move(self):
-        """
-        Move o agente usando a previsão do modelo de IA.
-        """
-        neighboring_cells = self.get_neighboring_cells()
-
-        # Ensure neighboring_cells is a dictionary with correct feature names
-        data = self.encoder.fit_transform(neighboring_cells)
-
-        # Predict using the AI model
-        move = self.ai_model.predict(data.reshape(1,-1))[0]
-        return move
 
     def get_valid_moves(self):
         """Retorna os movimentos válidos que o agente pode fazer, evitando bordas e backtracking."""
@@ -87,11 +67,6 @@ class Agent:
 
     def move(self, grid):
         """Movimenta o agente com base na IA, garantindo que a posição seja atualizada corretamente."""
-
-        if not self.alive:
-            print(f"{self.name} está destruído e não pode se mover.")
-            return self.position  # Prevent movement if the agent is dead
-
         valid_moves = self.get_valid_moves()  # Get valid moves
         if not valid_moves:
             print(f"{self.name} não tem movimentos válidos e permanecerá na posição.")
@@ -126,69 +101,6 @@ class Agent:
 
         print(f"{self.name} moveu-se para {self.position}")
         return self.position
-
-    # def move(self, grid):
-    #     # if manual_move:
-    #     #     return self.manual_move(manual_move,grid)
-    #
-    #     if len(self.previous_positions) == 2:
-    #         self.previous_positions.pop(0)
-    #     self.previous_positions.append(self.position)
-    #
-    #     x, y = self.position
-    #
-    #     neighboring_cells = self.get_neighboring_cells()
-    #     move = self.predict(neighboring_cells)[0]
-    #
-    #     print(f"{self.name} - Current Position: {self.position}")
-    #     print(f"{self.name} - Neighboring Cells: {neighboring_cells}")
-    #     print(move)
-    #
-    #     directions = {
-    #         "up": (x - 1, y),
-    #         "down": (x + 1, y),
-    #         "left": (x, y - 1),
-    #         "right": (x, y + 1)
-    #     }
-    #
-    #     new_position = directions.get(move, self.position)
-    #
-    #     if new_position == self.position:
-    #         print(f"{self.name} - WARNING: Selected move does not change position!")
-    #
-    #     # Ensure new position is valid and not out of bounds
-    #     if not self.is_within_bounds(new_position):
-    #         print(f"{self.name}: Move '{move}' is out of bounds. Skipping move.")
-    #         return self.position
-    #
-    #     if len(self.previous_positions) == 2:
-    #         attempts = 0
-    #         while new_position == self.previous_positions[0] and attempts < 5:
-    #             possible_moves = [value for value in neighboring_cells if value != '-']
-    #
-    #             if not possible_moves:
-    #                 print(f"{self.name}: No valid moves left. Staying in place.")
-    #                 return self.position  # Stay in place if no valid moves
-    #
-    #             new_move = random.choice(possible_moves)
-    #             new_position = directions.get(new_move, self.position)
-    #             attempts += 1
-    #
-    #     print(f"{self.name} moving to {new_position}")
-    #
-    #     # Interact with the new cell
-    #     x, y = new_position
-    #
-    #     try:
-    #         self.interact(grid, x, y)
-    #     except Exception as e:
-    #         print(f"failed to interact with {self.name}: {e}")
-    #         return self.position #Prevents breaking the loop
-    #
-    #     # Update position
-    #     self.position = new_position
-    #     self.ghost_env.print_ghost_environment()
-    #     return self.position
 
     def interact(self, grid, x, y):
         cell = grid[x][y]

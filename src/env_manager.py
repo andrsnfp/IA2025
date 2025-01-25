@@ -175,4 +175,3 @@ class EnvironmentManager:
         #     tk.Button(row_frame, text="➡", command=lambda a=agent: move_agent(a, "right")).pack(side="left")
 
         update_grid()
-        #env_window.mainloop()

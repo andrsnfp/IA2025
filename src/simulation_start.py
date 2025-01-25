@@ -1,5 +1,5 @@
 from sklearn.naive_bayes import GaussianNB
-from sklearn.preprocessing import LabelEncoder, StandardScaler
+from sklearn.preprocessing import LabelEncoder
 from sklearn.model_selection import train_test_split
 
 from sklearn.neighbors import KNeighborsClassifier
@@ -88,7 +88,7 @@ def establish_ai_data():
     # split dataset into features (x) and targets (y)
     x = dataset[['left','right','up','down']].values  # First 4 columns as features
     y = dataset['Move']  # Fifth column as the target
-    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.6, random_state = 42)
+    x_train, x_test, y_train, y_test = train_test_split(x, y, test_size = 0.2, random_state = 42)
 
     ai_data = x_train, y_train, label_encoder
 
