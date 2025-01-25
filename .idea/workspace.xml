@@ -4,7 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="ce8dbe8c-8190-4f0a-8a99-14021771fc7d" name="Changes" comment="25. Added time and countdown.">
+    <list default="true" id="ce8dbe8c-8190-4f0a-8a99-14021771fc7d" name="Changes" comment="25.1 Added stop button">
+      <change afterPath="$PROJECT_DIR$/src/graphics_analysis.py" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
       <change beforePath="$PROJECT_DIR$/src/env_manager.py" beforeDir="false" afterPath="$PROJECT_DIR$/src/env_manager.py" afterDir="false" />
     </list>
     <list id="6cd9376c-7cb2-4b76-b962-f43c5b9c6df4" name="Changes by Alberto Mateus" comment="" />
@@ -213,7 +215,7 @@
       <workItem from="1737581079300" duration="1311000" />
       <workItem from="1737720011451" duration="31342000" />
       <workItem from="1737824364528" duration="559000" />
-      <workItem from="1737828646954" duration="6018000" />
+      <workItem from="1737828646954" duration="8031000" />
     </task>
     <task id="LOCAL-00001" summary="Primeiro commit. Criação do Ambiente.&#10;Ambiente é gerado com a opção de perguntar o ratio de bombas antes da geração.">
       <option name="closed" value="true" />
@@ -511,7 +513,15 @@
       <option name="project" value="LOCAL" />
       <updated>1737834487251</updated>
     </task>
-    <option name="localTasksCounter" value="38" />
+    <task id="LOCAL-00038" summary="25.1 Added stop button">
+      <option name="closed" value="true" />
+      <created>1737834774618</created>
+      <option name="number" value="00038" />
+      <option name="presentableId" value="LOCAL-00038" />
+      <option name="project" value="LOCAL" />
+      <updated>1737834774618</updated>
+    </task>
+    <option name="localTasksCounter" value="39" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -529,7 +539,6 @@
     </option>
   </component>
   <component name="VcsManagerConfiguration">
-    <MESSAGE value="14. Made agents spawn randomly in the environment. And separated interaction logic." />
     <MESSAGE value="14.1 Created Class GhostEnvironment to replace the current ghost environment. Not finished" />
     <MESSAGE value="15. Created Class GhostEnvironment to replace the current ghost environment. It is finished and the code has been severely improved.&#10;REMINDER THAT PYTHON IS FUCKING OBJECT ORIENTED" />
     <MESSAGE value="15.1. Created Cell class. Return to this commit in case you need to reset." />
@@ -554,7 +563,8 @@
     <MESSAGE value="24.1 Some log translation and corrected the cheating error. Where the agents could see the environment in the agent.move() function" />
     <MESSAGE value="24.2 Added back manual move function into env_manager. For testing purposes" />
     <MESSAGE value="25. Added time and countdown." />
-    <option name="LAST_COMMIT_MESSAGE" value="25. Added time and countdown." />
+    <MESSAGE value="25.1 Added stop button" />
+    <option name="LAST_COMMIT_MESSAGE" value="25.1 Added stop button" />
   </component>
   <component name="com.intellij.coverage.CoverageDataManagerImpl">
     <SUITE FILE_PATH="coverage/IA2025$main.coverage" NAME="main Coverage Results" MODIFIED="1737834708150" SOURCE_PROVIDER="com.intellij.coverage.DefaultCoverageFileProvider" RUNNER="coverage.py" COVERAGE_BY_TEST_ENABLED="false" COVERAGE_TRACING_ENABLED="false" WORKING_DIRECTORY="$PROJECT_DIR$/src" />

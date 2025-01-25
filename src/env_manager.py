@@ -1,6 +1,7 @@
 import random
 import tkinter as tk
 from cell import Cell
+import json
 
 class EnvironmentManager:
     def __init__(self, agents_positions, num_treasures, bombs_ratio, approach, time):
@@ -14,9 +15,11 @@ class EnvironmentManager:
         self.approach = approach
         self.agents_positions = agents_positions # Position of all agents
         self.grid = self.generate_grid()
+        self.total_movements = 0  # Contador de movimentos
 
         self.countdown_timer = True
         self.time_remaining = time
+
 
     def receive_agents(self,agents, model):
         self.agents = agents # The Agents running in the environment
@@ -109,6 +112,7 @@ class EnvironmentManager:
             tk.Label(env_window, text=f"Algoritmo IA: {self.model}", font=("Arial", 15), fg="black").pack(expand=False)
             tk.Label(env_window, text=f"Células descobertas: {discovered_percentage:.2f}%", font=("Arial", 15), fg="black").pack(expand=False)
             tk.Label(env_window, text=f"Tesouros descobertos: {treasures_percentage:.2f}%", font=("Arial", 15), fg="black").pack(expand=False)
+            tk.Label(env_window, text=f"Total de Movimentos: {self.total_movements}", font=("Arial", 15),fg="black").pack(expand=False)
             if self.approach == "C":
                 if self.is_flag_found():
                     tk.Label(env_window, text=f"Bandeira encontrada.", font=("Arial", 15), fg="black").pack(expand=False)
@@ -158,7 +162,11 @@ class EnvironmentManager:
             if not agent.alive:
                 print(f"{agent.name} foi destruído em {agent.position}.")
             else:
+                previous_position = agent.position
                 agent.move(self.grid)  # Move only one agent at a time
+
+                if agent.position != previous_position:
+                    self.total_movements += 1
 
             update_grid()
             env_window.after(500, move_agents, index + 1)  # VELOCIDADE DA SIMULACAO
