@@ -84,13 +84,13 @@ class EnvironmentManager:
         def display_success():
             for widget in env_window.winfo_children():
                 widget.destroy()
-            tk.Label(env_window, text="SUCCESS", font=("Arial", 24), fg="green").pack(expand=True)
+            tk.Label(env_window, text="SUCCESSO", font=("Arial", 24), fg="green").pack(expand=True)
             display_stats()
 
         def display_failure():
             for widget in env_window.winfo_children():
                 widget.destroy()
-            tk.Label(env_window, text="FAILURE", font=("Arial", 24), fg="red").pack(expand=True)
+            tk.Label(env_window, text="FRACASSO", font=("Arial", 24), fg="red").pack(expand=True)
             display_stats()
 
         def display_stats():
@@ -140,12 +140,19 @@ class EnvironmentManager:
             agent = self.agents[index]
 
             if not agent.alive:
-                print(f"{agent.name} is destroyed in {agent.position} and cannot move.")
+                print(f"{agent.name} foi destruído em {agent.position}.")
             else:
                 agent.move(self.grid)  # Move only one agent at a time
 
             update_grid()
-            env_window.after(270, move_agents, index + 1)  # Call next agent after 1s
+            env_window.after(1000, move_agents, index + 1)  # Call next agent after 1s
+
+            def move_agent(agent, direction):
+                if not agent.alive:
+                    print(f"{agent.name} is destroyed in {agent.position} and cannot move.")
+                    return
+                agent.manual_move(direction, self.grid)
+                update_grid()
 
         # GUI setup
         for r in range(self.rows):

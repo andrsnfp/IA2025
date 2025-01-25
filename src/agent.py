@@ -102,7 +102,8 @@ class Agent:
         for move, (new_x, new_y) in valid_moves.items():
             if move in direction_map:  # Ensure we're only adding known directions
                 index = direction_map[move]
-                cell_type = grid[new_x][new_y].type
+                # cell_type = grid[new_x][new_y].type USE ONLY IF AGENTS SEE THE REAL ENVIRONMENT
+                cell_type = self.ghost_env.get_cell_value(new_x, new_y)
                 if (new_x, new_y) in self.bomb_override:
                     cell_type = "B"  # Override with a bomb if needed
                 neighboring_cells[index] = cell_type  # Assign to correct position
@@ -111,7 +112,7 @@ class Agent:
 
         # Predict the move using AI
         predicted_direction = self.ai_model.predict(encoded_data)[0]
-        print(f"Predicted move: {predicted_direction}")
+        print(f"Movimento previsto: {predicted_direction}")
 
         # Ensure the predicted move is valid
         if predicted_direction not in valid_moves:
@@ -148,27 +149,26 @@ class Agent:
             self.interact_with_f(cell, x, y)
 
     def interact_with_l(self, cell, x, y):
-        print(f"{self.name} moved to a free cell.")
         cell.discover()
         self.ghost_env.update_ghost_environment(x, y, 'L')
 
     def interact_with_b(self, cell, x, y):
         if self.empowered > 0:
-            print(f"{self.name} deactivated a bomb using empowerment!")
+            print(f"{self.name} desactivou uma bomba com empoderamento!")
             self.empowered -= 1  # Empowerment is consumed
             cell.destroy_bomb()  # Update real environment
             self.ghost_env.update_ghost_environment(x, y, 'L')
         else:
-            print(f"{self.name} hit a bomb and is destroyed!")
+            print(f"{self.name} bateu em uma bomba e foi destruído!")
             self.alive = False
             if self.consume_all_treasure:
                 self.ghost_env.update_ghost_environment(x, y, 'B')
 
     def interact_with_t(self, cell, x, y):
         if (x, y) in self.consumed_treasures:
-            print(f"{self.name} stepped on an already consumed treasure. No effect.")
+            print(f"{self.name} pisou num tesouro já usado. Sem efeito.")
         else:
-            print(f"{self.name} found a treasure! Empowerment acquired.")
+            print(f"{self.name} achou um tesouro! Poder adquirido!!!.")
             self.empowered += 1  # Agent becomes empowered
             self.consumed_treasures.add((x, y))  # Mark this treasure as consumed
             cell.discover()
@@ -180,7 +180,7 @@ class Agent:
                 self.ghost_env.update_ghost_environment(x, y, 'T')
 
     def interact_with_f(self, cell, x, y):
-        print(f"{self.name} reached the flag! Success!")
+        print(f"{self.name} encontrou a bandeira! Successo!!!")
         cell.found_the_flag()
         self.ghost_env.update_ghost_environment(x, y, 'F')
 
