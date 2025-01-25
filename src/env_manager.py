@@ -20,7 +20,6 @@ class EnvironmentManager:
         self.countdown_timer = True
         self.time_remaining = time
 
-
     def receive_agents(self,agents, model):
         self.agents = agents # The Agents running in the environment
         self.model = model
@@ -83,6 +82,25 @@ class EnvironmentManager:
 
         return None
 
+    def save_simulation_data(self, env_name):
+        """Saves each environment's data separately."""
+        dados_simulacao = {
+            "Algoritmo IA": env_name,
+            "Células Descobertas (%)": self.count_discovered_cells() // self.num_free_cells * 100 if self.num_free_cells else 0,
+            "Tesouros Descobertos (%)": self.count_consumed_treasures() // self.num_treasures * 100 if self.num_free_cells else 0,
+            "Agentes Sobreviventes": sum(1 for agent in self.agents if agent.alive),
+            "Movimentos Totais": self.total_movements,
+            "Tempo Restante (s)": self.time_remaining if isinstance(self.time_remaining, int) else 0,
+            "Bombas no Ambiente": self.num_bombs,
+        }
+
+        filename = f"simulation_data/simulation_results_{env_name}.json"
+
+        with open(filename, "w") as file:
+            json.dump(dados_simulacao, file, indent=4)
+
+        print(f"✅ Dados da simulação salvos em {filename}")
+
     def display(self, agents, env_window):
 
         labels = [[None for _ in range(self.cols)] for _ in range(self.rows)]
@@ -120,6 +138,7 @@ class EnvironmentManager:
                     tk.Label(env_window, text=f"Bandeira não foi encontrada.", font=("Arial", 15), fg="black").pack(expand=False)
             if self.countdown_timer == False:
                 tk.Label(env_window, text="O tempo acabou.", font=("Arial", 15), fg="black").pack(expand=False)
+            self.save_simulation_data(self.model)
 
         def update_grid():
             for row in range(self.rows):
